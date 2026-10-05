@@ -1,0 +1,115 @@
+/* Shared structure for every ASCII Atlas page. Pages set the palette + type tokens below and add their own art. */
+:root{
+  --bg:#04071a;            /* page */
+  --ink:#e9eefb;           /* text */
+  --ink-dim:rgba(214,224,247,.6);
+  --hair:rgba(190,205,240,.26);
+  --accent:#f2b866;
+  --accent-2:#ee7a52;
+  --panel:rgba(4,7,26,.95);
+  --line:rgba(233,238,251,.75);      /* cursor lines */
+  --line-glow:rgba(170,195,255,.55);
+  --tag-bg:rgba(4,7,26,.6);
+  --cta-fade:rgba(4,7,26,.92);
+  --display:serif; --serif:serif; --mono:ui-monospace,monospace; --sans:system-ui,sans-serif;
+  --gutter:clamp(16px,2.4vw,40px);
+}
+@view-transition{navigation:auto}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.6s}
+*{box-sizing:border-box;margin:0;padding:0;cursor:default}      /* never the text I-beam */
+a,a *{cursor:pointer}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:var(--bg)}
+
+/* ——— shader stage ——— */
+#stage{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;opacity:0;transition:opacity 1.6s ease}
+#stage.on{opacity:1}
+video{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.fallback #stage,.fallback #split,.fallback #hsplit,.fallback #ring{display:none}
+
+/* ——— header: page switcher ——— */
+header{position:fixed;top:0;left:0;right:0;z-index:20;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  padding:18px var(--gutter);font:400 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;mix-blend-mode:difference;color:#fff}
+header a{color:inherit;text-decoration:none}
+header .r{justify-self:end}
+header .r:hover{opacity:.6}
+.logo b{font:600 15px/1 var(--sans);letter-spacing:.02em;text-transform:none;margin-right:8px}
+.pages{display:flex;gap:6px;padding:4px;border:1px solid rgba(255,255,255,.35);border-radius:999px}
+.pages a{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;transition:background .3s,color .3s}
+.pages a:hover{background:rgba(255,255,255,.14)}
+.pages a[aria-current=page]{background:#fff;color:#000}
+.pages a span{opacity:.55}
+.pages a b{font-weight:inherit}
+
+/* ——— hero ——— */
+.hero{position:relative;height:100svh;min-height:560px;z-index:1;overflow:hidden}
+.spread{position:absolute;z-index:3;left:var(--gutter);right:var(--gutter);display:flex;justify-content:space-between;
+  font:400 clamp(11px,1.05vw,15px)/1 var(--serif);letter-spacing:.02em;color:var(--ink)}
+.spread.top{top:64px}
+.spread.bot{bottom:26px}
+.word{position:absolute;white-space:nowrap;line-height:.8;padding:.1em .04em .22em;will-change:transform;transition:opacity 1.6s ease}
+.word .bl{display:inline-block;width:0;height:0;vertical-align:baseline}   /* baseline probe for the shader's text mask */
+.gl-on .word{opacity:0}                                                     /* the shader draws the title once WebGL is live */
+.w1{transform:translateX(calc(var(--p,0) * -18vw))}
+.w2{transform:translateX(calc(var(--p,0) * 22vw))}
+
+/* ——— cursor: split line (original | effect), horizontal line, ring sized to the grid ——— */
+#split{position:fixed;top:0;bottom:0;left:0;width:1px;z-index:1;pointer-events:none;background:var(--line);
+  box-shadow:0 0 12px var(--line-glow);font:400 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);will-change:transform}
+#hsplit{position:fixed;left:0;right:0;top:0;height:1px;z-index:1;pointer-events:none;background:var(--line);opacity:.75;
+  box-shadow:0 0 12px var(--line-glow);will-change:transform}
+#ring{position:fixed;left:0;top:0;width:var(--d,40px);height:var(--d,40px);margin:calc(var(--d,40px)/-2) 0 0 calc(var(--d,40px)/-2);z-index:1;pointer-events:none;
+  border:1px solid var(--ink);border-radius:50%;box-shadow:0 0 14px var(--line-glow);will-change:transform}
+#ring::after{content:"";position:absolute;left:50%;top:50%;width:3px;height:3px;margin:-1.5px 0 0 -1.5px;border-radius:50%;background:var(--accent-2)}
+#split .lab{position:absolute;bottom:64px;white-space:nowrap}
+#split .l{right:12px}
+#split .r{left:12px}
+#gridTag{position:absolute;left:calc(var(--d,40px)/2 + 14px);transform:translateY(-50%);white-space:nowrap;padding:5px 8px;background:var(--tag-bg);border:1px solid var(--hair)}
+
+/* ——— content ——— */
+section.panel{position:relative;z-index:2;background:var(--panel);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px)}
+.kicker{font:400 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:flex;gap:18px;align-items:center}
+.kicker::after{content:"";flex:1;height:1px;background:var(--hair)}
+.manifesto{padding:clamp(72px,11vh,120px) var(--gutter) clamp(56px,9vh,96px)}
+.manifesto p{margin-top:36px;font:400 clamp(34px,5.6vw,96px)/1.02 var(--serif);letter-spacing:-.025em;max-width:16.5em;text-wrap:balance}
+.manifesto p sup{font:400 10px/1 var(--mono);letter-spacing:.1em;color:var(--ink-dim);vertical-align:top;margin-left:4px;position:relative;top:.6em}
+.manifesto .sig{margin-top:36px;display:flex;justify-content:space-between;font:300 11px/1.6 var(--mono);letter-spacing:.12em;color:var(--ink-dim);text-transform:uppercase;gap:24px;flex-wrap:wrap}
+.marquee{position:relative;z-index:2;overflow:hidden;border-block:1px solid var(--hair)}
+.marquee div{display:flex;width:max-content;animation:marq 38s linear infinite}
+.marquee span{font:600 clamp(48px,8vw,130px)/1.1 var(--serif);letter-spacing:-.03em;padding-right:.4em;white-space:nowrap}
+@keyframes marq{to{transform:translateX(-50%)}}
+.specs{padding:clamp(56px,9vh,96px) var(--gutter)}
+.specs dl{display:grid;grid-template-columns:repeat(4,1fr);margin-top:28px}
+.specs dl>div{padding:22px 20px 22px 0;border-bottom:1px solid var(--hair)}
+.specs dt{font:300 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim)}
+.specs dd{margin-top:14px;font:500 clamp(28px,3.4vw,52px)/1 var(--serif);letter-spacing:-.02em}
+.specs dd small{font:300 12px var(--mono);color:var(--ink-dim);margin-left:6px;letter-spacing:.06em}
+.cta{position:relative;z-index:1;background:linear-gradient(to top,var(--cta-fade),transparent 60%);height:100svh;min-height:600px;
+  display:flex;flex-direction:column;justify-content:flex-end;padding:0 var(--gutter) 40px}
+.cta .row{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-top:36px;flex-wrap:wrap}
+.cta p{font:300 17px/1.5 var(--sans);max-width:30em;color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:18px;padding:20px 28px;border-radius:999px;background:var(--ink);color:var(--bg);text-decoration:none;
+  font:400 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;transition:gap .35s ease,background .35s}
+.btn:hover{gap:30px;background:var(--accent)}
+footer{position:relative;z-index:2;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:22px var(--gutter);
+  font:300 10px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 1.2s cubic-bezier(.2,.7,.1,1),transform 1.2s cubic-bezier(.2,.7,.1,1)}
+.reveal.in{opacity:1;transform:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media (max-width:760px){
+  header{grid-template-columns:auto 1fr;gap:12px}
+  header .r{display:none}
+  .pages{justify-self:end}
+  .pages{gap:2px}
+  .pages a{padding:7px 9px}
+  .pages a b{display:none}                 /* phones: issue numbers only */
+  .pages a span{opacity:1}
+  .spread{font-size:11px}
+  .specs dl{grid-template-columns:1fr 1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .marquee div{animation:none!important}
+  .reveal{opacity:1;transform:none}
+}

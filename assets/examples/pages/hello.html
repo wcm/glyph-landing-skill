@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hello, world.</title>
+<meta name="description" content="Hello, world. — the machine that said hello first. ASCII Atlas Nº09.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+:root{
+  --bg:#1533d6;                  /* blueprint cobalt */
+  --deep:#0b1d8f;
+  --ink:#f2f0e6;                 /* drafting white */
+  --ink-dim:rgba(242,240,230,.62);
+  --hair:rgba(242,240,230,.28);
+  --accent:#e4ff3c;              /* acid yellow — also what the shader's inverse title lands on */
+  --accent-2:#ff4b2b;
+  --panel:#1533d6;
+  --line:rgba(242,240,230,.85);
+  --line-glow:rgba(228,255,60,.25);
+  --tag-bg:#0b1d8f;
+  --cta-fade:rgba(11,29,143,.94);
+  --display:"Pixelify Sans", "VT323", monospace;
+  --serif:"Pixelify Sans", monospace;
+  --mono:"Space Mono", ui-monospace, monospace;
+  --sans:"Space Mono", ui-monospace, monospace;
+  --grid:linear-gradient(rgba(242,240,230,.07) 1px, transparent 1px) 0 0/24px 24px,
+         linear-gradient(90deg, rgba(242,240,230,.07) 1px, transparent 1px) 0 0/24px 24px,
+         linear-gradient(rgba(242,240,230,.14) 1px, transparent 1px) 0 0/120px 120px,
+         linear-gradient(90deg, rgba(242,240,230,.14) 1px, transparent 1px) 0 0/120px 120px;
+}
+.fallback .hero,.fallback .cta{background:var(--grid),url(media/mac-poster.jpg) 62% 50%/cover}
+.spread{font:400 clamp(10px,.9vw,13px)/1 var(--mono);letter-spacing:.18em;text-transform:uppercase}
+.word{font-family:var(--display);font-weight:700;font-size:max(20vw,16vh);letter-spacing:-.02em;color:var(--ink)}
+.w1{top:calc(64px + 3vh - .1em);left:-.6vw}
+.w2{bottom:calc(26px + 4vh - .22em);left:9vw}
+#ring{border-radius:0;border-color:var(--accent);box-shadow:none}
+#ring::after{width:4px;height:4px;margin:-2px 0 0 -2px;border-radius:0;background:var(--accent)}
+#gridTag{font-family:var(--mono);color:var(--accent);border-color:var(--accent)}
+#split .lab{font-family:var(--mono)}
+
+/* ——— blueprint: graph paper, wireframe, dimensions, callouts, title block ——— */
+.paper{position:absolute;inset:0;pointer-events:none;background:var(--grid)}
+.wire{position:absolute;left:2vw;top:12vh;width:min(36vw,520px);aspect-ratio:1;pointer-events:none;overflow:visible}
+.wire line{stroke:var(--ink);stroke-width:1;vector-effect:non-scaling-stroke;opacity:.55}
+.wire line.front{opacity:.9}
+.wire line.axis{stroke:var(--accent);opacity:.9}
+.wire rect{fill:var(--ink)}
+.wire text{font:400 11px var(--mono);fill:var(--accent);letter-spacing:.1em}
+.draft{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.draft line,.draft path{stroke:var(--ink);stroke-width:1;fill:none;opacity:.8}
+.draft .ext{stroke-dasharray:3 4;opacity:.45}
+.draft text{font:400 11px var(--mono);fill:var(--ink);letter-spacing:.12em;text-transform:uppercase}
+.draft .tag{fill:var(--deep);stroke:var(--ink);stroke-width:1}
+.draft .pin{fill:var(--accent);stroke:none}
+.draft .hot{fill:var(--accent)}
+.block{position:absolute;right:var(--gutter);bottom:64px;display:grid;grid-template-columns:auto auto;border:1px solid var(--ink);
+  font:400 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;background:rgba(11,29,143,.75)}
+.block div{padding:7px 10px;border:1px solid var(--hair)}
+.block b{display:block;font-weight:400;color:var(--ink-dim);font-size:8px;margin-bottom:5px}
+.block .t{grid-column:1/-1;font:700 15px/1 var(--display);letter-spacing:.04em;color:var(--accent)}
+.caret{position:absolute;width:.06em;height:.7em;background:var(--accent);animation:blink 1.06s steps(1) infinite;pointer-events:none;font-size:max(20vw,16vh)}
+@keyframes blink{50%{opacity:0}}
+
+/* ——— sections ——— */
+section.panel{background:var(--grid),var(--panel);backdrop-filter:none;-webkit-backdrop-filter:none;border-top:1px solid var(--ink)}
+.manifesto p{font-family:var(--display);font-weight:500;letter-spacing:-.01em;line-height:1.08}
+.manifesto p em{font-style:normal;background:var(--accent);color:var(--deep);padding:0 .12em}
+.manifesto .sig{font-family:var(--mono)}
+.marquee{background:var(--accent);color:var(--deep);border-block:1px solid var(--deep)}
+.marquee span{font-family:var(--display);font-weight:700;letter-spacing:0}
+.marquee span i{font-style:normal;color:var(--accent-2)}
+.specs dl{border-top:1px solid var(--ink);border-left:1px solid var(--ink)}
+.specs dl>div{padding:22px 20px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.specs dd{font-family:var(--display);font-weight:700;letter-spacing:0}
+.cta h2{font:700 clamp(84px,16vw,280px)/.85 var(--display);letter-spacing:-.02em}
+.cta h2 i{font-style:normal;color:var(--accent)}
+.cta p{font-size:15px}
+.btn{border-radius:0;background:var(--accent);color:var(--deep);box-shadow:6px 6px 0 var(--ink);font-weight:700}
+.btn:hover{background:var(--ink);color:var(--deep);box-shadow:3px 3px 0 var(--accent)}
+footer{background:var(--deep);border-top:1px solid var(--ink)}
+
+@media (max-width:760px){
+  .word{font-size:27vw}.caret{font-size:27vw}
+  .w1{top:calc(64px + 6vh - .1em)}
+  .w2{bottom:calc(26px + 7vh - .22em);left:2vw}
+  .wire{width:70vw;top:18vh;opacity:.6}
+  .block,.draft text,.draft .tag{display:none}
+}
+@media (prefers-reduced-motion:reduce){ .caret{animation:none} }
+</style>
+</head>
+<body>
+<canvas id="stage" aria-hidden="true"></canvas>
+<div id="split" aria-hidden="true"><span class="lab l">← Photo</span><span class="lab r">ASCII →</span><span id="gridTag">Grid 0px</span></div>
+<div id="hsplit" aria-hidden="true"></div>
+<div id="ring" aria-hidden="true"></div>
+<video id="src" src="media/mac-loop.mp4" muted loop playsinline autoplay preload="auto" crossorigin="anonymous"></video>
+
+<header>
+  <div class="logo"><b>ASCII Atlas</b>Nº09</div>
+  <nav class="pages" aria-label="Issues"><a href="index.html"><span>07</span><b>Weightless</b></a><a href="unfold.html"><span>08</span><b>Unfold</b></a><a href="hello.html" aria-current="page"><span>09</span><b>Hello</b></a><a href="updraft.html"><span>10</span><b>Updraft</b></a><a href="biolume.html"><span>11</span><b>Biolume</b></a></nav>
+  <a class="r" href="#boot">Boot ↗</a>
+</header>
+
+<main>
+  <section class="hero" aria-label="Hello, world.">
+    <div class="paper" aria-hidden="true"></div>
+    <svg class="wire" id="wire" viewBox="-160 -160 320 320" aria-hidden="true"></svg>
+    <div class="spread top" aria-hidden="true"><span>In</span><span>1984</span><span>a</span><span>beige</span><span>box</span><span>said</span><span>hello</span></div>
+    <h1 class="word w1">Hello,<span class="bl"></span></h1>
+    <div class="word w2" aria-hidden="true">world.<span class="bl"></span></div>
+    <span class="caret" id="caret" aria-hidden="true"></span>
+    <div class="spread bot" aria-hidden="true"><span>We</span><span>have</span><span>been</span><span>answering</span><span>ever</span><span>since</span></div>
+
+    <svg class="draft" id="draft" aria-hidden="true"></svg>
+    <div class="block" aria-hidden="true">
+      <div class="t">Macintosh 128K</div>
+      <div><b>Dwg Nº</b>09-1984</div><div><b>Scale</b>1 : 4</div>
+      <div><b>Released</b>24.01.1984</div><div><b>Sheet</b>1 / 1</div>
+    </div>
+  </section>
+
+  <section class="panel manifesto" id="note">
+    <div class="kicker reveal">01 — Boot sequence</div>
+    <p class="reveal">Before the cloud, before the feed, there was a <em>9-inch window</em>, 512 by 342 dots, and a blinking cursor<sup>[01]</sup> waiting for <em>you</em> to say something first.</p>
+    <div class="sig reveal"><span>[01] Macintosh 128K · 24 January 1984</span><span>Drawn at 72 dots per inch</span></div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div>
+    <span>Insert disk <i>■</i> Point <i>■</i> Click <i>■</i> Drag <i>■</i> Undo <i>■</i></span>
+    <span>Insert disk <i>■</i> Point <i>■</i> Click <i>■</i> Drag <i>■</i> Undo <i>■</i></span>
+  </div></div>
+
+  <section class="panel specs" id="profile">
+    <div class="kicker reveal">02 — System profile</div>
+    <dl class="reveal">
+      <div><dt>Memory</dt><dd>128<small>KB</small></dd></div>
+      <div><dt>Display</dt><dd>512×342</dd></div>
+      <div><dt>Clock</dt><dd>7.83<small>MHz</small></dd></div>
+      <div><dt>Colours</dt><dd>2</dd></div>
+    </dl>
+  </section>
+
+  <section class="cta" id="boot">
+    <h2 class="reveal">Say<br><i>hello.</i></h2>
+    <div class="row reveal">
+      <p>Hello, World — a pixel-perfect retrospective of the machines that taught us to point and click. Late opening Thursdays. Floppies welcome.</p>
+      <a class="btn" href="#boot">Boot the exhibit <span>→</span></a>
+    </div>
+  </section>
+</main>
+<footer><span>ASCII Atlas Nº09 — Hello, world.</span><span>Fictional exhibition · design study</span><span>512 × 342 · 1-bit</span></footer>
+
+<script type="module">
+import { stage } from './engine.js';
+
+// Blueprint: a 1-bit dithered cobalt field, real font glyphs for the subject, CRT convergence instead of lens fringing.
+const FS = `
+float bayer(vec2 p){
+  ivec2 q = ivec2(mod(p, 4.));
+  const float m[16] = float[16](0.,8.,2.,10., 12.,4.,14.,6., 3.,11.,1.,9., 15.,7.,13.,5.);
+  return (m[q.x + q.y*4] + .5)/16.;
+}
+const vec3 DEEP = vec3(.04, .10, .52), COB = vec3(.08, .20, .84), LIT = vec3(.25, .42, 1.);
+// light level of the field: lit from the top-right, a dark well low-left, a glow around the subject
+float level(vec2 uv, vec2 c){
+  float t = uTime;
+  float g = .38 + .3*uv.y;
+  g += .3*blob(uv, vec2(.86 + .04*sin(t*.2), .9), .42);
+  g -= .28*blob(uv, vec2(.04 + .03*sin(t*.17), .06), .5);
+  g += .32*msk(c, 5.);
+  return clamp(g, 0., 1.);
+}
+vec3 tone(float g){ return g < .5 ? mix(DEEP, COB, g*2.) : mix(COB, LIT, (g - .5)*2.); }
+// 1-bit field: three tones, ordered dither at 2px dots
+vec3 field(vec2 uv, vec2 c){
+  float g = level(uv, c), d = bayer(floor(uv*uRes/2.));
+  return g < .5 ? mix(DEEP, COB, step(d, g*2.)) : mix(COB, LIT, step(d, (g - .5)*2.));
+}
+
+vec3 scene(vec2 fc){
+  float t = uTime;
+  vec2 uv = fc/uRes;
+  vec3 col = field(uv, cover(uv));
+  float cs = uCell * (1. + uDissolve*3.);
+  vec2 ctr = uRes*.5;
+  float row = floor((fc.y - ctr.y)/cs);
+  float shift = step(.985, hash(vec2(row, floor(t*3.)))) * (hash(vec2(row, 7.1)) - .5) * cs * 6.;   // CRT tearing
+  vec2 gfc = fc - ctr + vec2(shift, 0.);
+  vec2 id = floor(gfc/cs);
+  vec2 p = fract(gfc/cs);
+  vec2 cuv = cover(((id + .5)*cs - vec2(shift, 0.) + ctr)/uRes);
+  vec3 ic = img(cuv, 1.);
+  float l = smoothstep(.04, .9, dot(ic, LW));
+  float mm = smoothstep(.22, .85, msk(cuv, .5)) * (1. - uDissolve*.75);
+  float m = step(hash(id*1.37 + 3.1), mm);
+  float tw = hash(id + floor(t*6. + hash(id)*6.));
+
+  col = mix(col, mix(vec3(.02, .05, .30), vec3(.07, .16, .66), l), m*.88);        // dark drafting plate under the subject
+  float i = clamp(l + (tw - .5)*.07, 0., .999) * uAtlasN;                          // brightness picks the character
+  vec3 ink = mix(vec3(.95, .94, .88), vec3(.89, 1., .24), smoothstep(.78, .95, l)); // drafting white, acid yellow on highlights
+  col = mix(col, ink, atlas(p, i) * m);
+
+  float streak = step(.993, hash(vec2(row, floor(t*.8)))) * step(.5, fract(gfc.x/cs*.5)) * box(p, vec2(0., .44), vec2(1., .56));
+  col = mix(col, vec3(.95), streak*.6*(1. - mm));
+  return col;
+}
+
+void main(){
+  vec2 fc = gl_FragCoord.xy;
+  vec2 uv = fc/uRes;
+  float md = length((uv - uMouse)*vec2(uRes.x/uRes.y, 1.));
+  vec2 off = vec2(uRes.y*(.0018 + .004*smoothstep(.3, 0., md)), 0.);              // CRT convergence: a horizontal-only split
+  vec3 col = vec3(scene(fc + off).r, scene(fc).g, scene(fc - off).b);
+
+  vec2 oc = cover(uv);
+  vec3 orig = mix(field(uv, oc), img(oc, 0.), smoothstep(.05, .6, msk(oc, 0.)));
+  col = mix(orig, col, step(uSplit*uRes.x, fc.x));
+  col *= .94 + .06*step(.5, fract(fc.y/3.));                                         // scanlines
+
+  // title: inverse of the smooth (undithered) backdrop — cobalt flips to acid yellow
+  float tm = texture(uText, uv).r;
+  if (tm > 0.){
+    vec2 c = cover(uv);
+    vec3 sbE = mix(tone(level(uv, c)), mix(vec3(.02, .05, .30), vec3(.07, .16, .66), smoothstep(.04, .9, dot(img(c, 4.), LW))), msk(c, 4.)*.88);
+    vec3 sbO = mix(tone(level(uv, oc)), img(oc, 4.2), smoothstep(.05, .6, msk(oc, 4.2)));
+    col = mix(col, 1. - mix(sbO, sbE, step(uSplit*uRes.x, fc.x)), tm);
+  }
+  col += (hash(fc + fract(uTime*7.)*91.) - .5) * .05;
+  outColor = vec4(col, 1.);
+}`;
+
+// subject geometry in source uv (GL, y up) — measured on media/mac-loop.mp4
+const BOX = { l: .383, r: .867, b: .098, t: .925 };
+const PARTS = [
+  { at: [.556, .603], label: '9″ CRT · 512 × 342 · 1-bit' },
+  { at: [.600, .325], label: '3.5″ floppy · 400 KB' },
+  { at: [.540, .905], label: 'Carry handle — built in' },
+];
+const draft = document.getElementById('draft'), NS = 'http://www.w3.org/2000/svg';
+const mk = (tag, attrs = {}, parent = draft) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+const dimW = { ext1: mk('line', {class:'ext'}), ext2: mk('line', {class:'ext'}), line: mk('path'), label: mk('text') };
+const dimH = { ext1: mk('line', {class:'ext'}), ext2: mk('line', {class:'ext'}), line: mk('path'), label: mk('text') };
+dimW.label.textContent = 'W 24.4 cm'; dimH.label.textContent = 'H 34.5 cm';
+const calls = PARTS.map(pt => {
+  const g = mk('g'); const path = mk('path', {}, g); const pin = mk('rect', {class:'pin', width:7, height:7}, g);
+  const tag = mk('rect', {class:'tag', height:22}, g); const text = mk('text', {}, g); text.textContent = pt.label;
+  return {...pt, path, pin, tag, text, w: 0};
+});
+const set = (el, a) => { for (const k in a) el.setAttribute(k, typeof a[k] === 'number' ? a[k].toFixed(1) : a[k]); };
+const arrow = (x1, y1, x2, y2) => {   // dimension line with tick ends
+  const a = Math.atan2(y2 - y1, x2 - x1), n = 6, nx = -Math.sin(a)*n, ny = Math.cos(a)*n;
+  return `M${x1} ${y1}L${x2} ${y2}M${x1 + nx} ${y1 + ny}L${x1 - nx} ${y1 - ny}M${x2 + nx} ${y2 + ny}L${x2 - nx} ${y2 - ny}`;
+};
+
+// ——— wireframe: a little 3D case drawing rotating behind the title ———
+const wire = document.getElementById('wire');
+const V = [[-1,-1.3,-1.1],[1,-1.3,-1.1],[1,1.3,-1.1],[-1,1.3,-1.1],[-1,-1.3,1.1],[1,-1.3,1.1],[1,1.3,1.1],[-1,1.3,1.1],
+           [-.7,-.25,1.1],[.7,-.25,1.1],[.7,.95,1.1],[-.7,.95,1.1],                    // screen
+           [-.1,-.75,1.1],[.6,-.75,1.1]];                                             // floppy slot
+const EDGES = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7],[8,9,'front'],[9,10,'front'],[10,11,'front'],[11,8,'front'],[12,13,'front']];
+const wl = EDGES.map(e => mk('line', {class: e[2] || ''}, wire));
+const wp = V.slice(0, 8).map(() => mk('rect', {width:5, height:5}, wire));
+const axes = ['x', 'y', 'z'].map(n => [mk('line', {class:'axis'}, wire), mk('text', {}, wire)]);
+axes.forEach(([, t], i) => t.textContent = 'XYZ'[i]);
+function drawWire(t){
+  const ay = t*.35, ax = -.42 + .08*Math.sin(t*.3), S = 62;
+  const pr = ([x, y, z]) => { const x1 = x*Math.cos(ay) + z*Math.sin(ay), z1 = -x*Math.sin(ay) + z*Math.cos(ay);
+    const y1 = y*Math.cos(ax) - z1*Math.sin(ax); return [x1*S, -y1*S]; };
+  const P = V.map(pr);
+  EDGES.forEach(([a, b], i) => set(wl[i], {x1:P[a][0], y1:P[a][1], x2:P[b][0], y2:P[b][1]}));
+  wp.forEach((r, i) => set(r, {x:P[i][0] - 2.5, y:P[i][1] - 2.5}));
+  const o = pr([-1.6, -1.8, 0]);
+  [[.6,0,0],[0,.6,0],[0,0,.6]].forEach((d, i) => { const e = pr([-1.6 + d[0], -1.8 + d[1], d[2]]);
+    set(axes[i][0], {x1:o[0], y1:o[1], x2:e[0], y2:e[1]}); set(axes[i][1], {x:e[0] + 4, y:e[1] - 4}); });
+}
+
+const caret = document.getElementById('caret'), w2 = document.querySelector('.w2');
+const caretRange = document.createRange(); caretRange.selectNodeContents(w2.firstChild);
+
+stage({ fs: FS, focus: [0.62, 0.5], zoom: 1.3, shift: [-.02, 0], cell: [4, 40], atlas: { chars: ' .:-=+*#%@', font: '"VT323"' }, onFrame({t, video, toScreen}){
+  drawWire(t);
+  // the measurements are taken on the front view: fade them back while the turntable shows the side (≈2–13 s of the loop)
+  const vt = video.currentTime || 0, ease = (a, b, x) => Math.min(Math.max((x - a)/(b - a), 0), 1);
+  draft.style.opacity = (.12 + .88*Math.max(1 - ease(1.2, 2.6, vt), ease(12.6, 14, vt))).toFixed(3);
+  const tl = toScreen(BOX.l, BOX.t), br = toScreen(BOX.r, BOX.b);
+  const y = br.y + 26, x = tl.x - 30;                   // width below, height on the left — callouts get the right
+  set(dimW.ext1, {x1:tl.x, y1:br.y + 6, x2:tl.x, y2:y + 8}); set(dimW.ext2, {x1:br.x, y1:br.y + 6, x2:br.x, y2:y + 8});
+  set(dimW.line, {d: arrow(tl.x, y, br.x, y)}); set(dimW.label, {x:(tl.x + br.x)/2 - 34, y:y - 8});
+  set(dimH.ext1, {x1:tl.x - 6, y1:tl.y, x2:x - 8, y2:tl.y}); set(dimH.ext2, {x1:tl.x - 6, y1:br.y, x2:x - 8, y2:br.y});
+  set(dimH.line, {d: arrow(x, tl.y, x, br.y)}); set(dimH.label, {x:x - 92, y:(tl.y + br.y)/2});
+  for (const c of calls){
+    const s = toScreen(...c.at), ty = s.y;
+    c.w = c.text.getComputedTextLength() + 20;               // re-measured: the mono font may load after the first frame
+    const right = br.x + 44 + c.w < innerWidth - 16;          // flip to the left when the right margin is too narrow
+    const ex = right ? br.x + 28 : tl.x - 28, tx = right ? ex + 16 : Math.max(12, ex - 16 - c.w);
+    set(c.pin, {x:s.x - 3.5, y:s.y - 3.5});
+    set(c.path, {d:`M${s.x} ${s.y}L${ex} ${ty}L${right ? ex + 16 : ex - 16} ${ty}`});
+    set(c.tag, {x:tx, y:ty - 11, width:c.w}); set(c.text, {x:tx + 10, y:ty + 4});
+  }
+  const r = caretRange.getBoundingClientRect();
+  caret.style.cssText = `left:${r.right + r.height*.04}px;top:${r.top + r.height*.2}px`;
+}});
+</script>
+</body>
+</html>

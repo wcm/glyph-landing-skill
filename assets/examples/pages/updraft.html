@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Updraft</title>
+<meta name="description" content="Updraft — a weekly letter about weather, light and paying attention. ASCII Atlas Nº10.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:wght@300;400&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+:root{
+  --bg:#f6efe6;                  /* warm cloud-cream */
+  --ink:#1b2350;                 /* evening indigo */
+  --ink-dim:rgba(27,35,80,.6);
+  --hair:rgba(27,35,80,.2);
+  --accent:#e59a1f;              /* low sun */
+  --accent-2:#2f56d6;            /* high sky */
+  --panel:rgba(246,239,230,.93);
+  --line:rgba(27,35,80,.7);
+  --line-glow:rgba(255,236,200,.8);
+  --tag-bg:rgba(246,239,230,.8);
+  --cta-fade:rgba(246,239,230,.92);
+  --display:"Fraunces", Georgia, serif;
+  --serif:"Fraunces", Georgia, serif;
+  --mono:"IBM Plex Mono", ui-monospace, monospace;
+  --sans:"IBM Plex Sans", system-ui, sans-serif;
+}
+.fallback .hero,.fallback .cta{background:linear-gradient(#2f5fc4,#9dbbe8 60%,#ffc9a0),url(media/cloud-poster.jpg) 55% 50%/cover;background-blend-mode:screen}
+.spread{font:italic 300 clamp(13px,1.3vw,19px)/1 var(--serif);color:#fff;text-shadow:0 1px 10px rgba(27,35,80,.35)}
+.word{font-family:var(--display);font-weight:700;font-size:max(25vw,18vh);letter-spacing:-.055em;color:var(--ink);font-optical-sizing:auto}
+.w1{top:calc(64px + 2vh - .1em);left:-.8vw}
+.w2{bottom:calc(26px + 3vh - .22em);left:16vw;font-style:italic;font-weight:400}
+#ring{border-color:#fff;box-shadow:0 0 0 1px rgba(27,35,80,.25),0 0 18px rgba(255,236,200,.9)}
+#ring::after{background:var(--accent)}
+#split,#hsplit{background:rgba(255,255,255,.85)}
+#split .lab{color:#fff}
+
+/* ——— weather map: isobars, streamlines, altitude scale, sun protractor ——— */
+.wx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.wx .iso{fill:none;stroke:rgba(255,255,255,.55);stroke-width:1;vector-effect:non-scaling-stroke}
+.wx .iso.b{stroke:rgba(27,35,80,.28)}
+.wx .iso-l{font:400 10px var(--mono);fill:rgba(255,255,255,.85);letter-spacing:.08em}
+.wx .flow{fill:none;stroke:rgba(255,255,255,.75);stroke-width:1.1;stroke-linecap:round;vector-effect:non-scaling-stroke;
+  stroke-dasharray:26 140;animation:stream var(--fd) linear infinite;animation-delay:var(--dl)}
+.wx .flow.b{stroke:rgba(27,35,80,.45)}
+.wx .head{fill:#fff}
+.wx .pole{fill:none;stroke:var(--accent);stroke-width:1.4;vector-effect:non-scaling-stroke}
+.wx text.H{font:600 28px var(--display);fill:#fff}
+@keyframes stream{from{stroke-dashoffset:166}to{stroke-dashoffset:0}}
+.alt{position:absolute;right:var(--gutter);top:12%;bottom:12%;width:64px;pointer-events:none;font:400 9.5px/1 var(--mono);letter-spacing:.1em;color:#fff}
+.alt i{position:absolute;right:0;height:1px;background:rgba(255,255,255,.7)}
+.alt span{position:absolute;right:26px;transform:translateY(-50%)}
+.alt .mk{position:absolute;right:0;width:120px;height:1px;background:var(--accent);transition:top .2s}
+.alt .mk b{position:absolute;right:124px;top:-6px;white-space:nowrap;font-weight:400;color:#fff;background:rgba(27,35,80,.55);padding:3px 6px}
+.sun{position:absolute;width:0;height:0;pointer-events:none}
+.sun svg{position:absolute;left:-90px;top:-90px;width:180px;height:180px;overflow:visible;animation:spin 80s linear infinite}
+.sun svg circle{fill:none;stroke:rgba(255,255,255,.75);stroke-width:1;vector-effect:non-scaling-stroke}
+.sun svg line{stroke:#fff;stroke-width:1;vector-effect:non-scaling-stroke}
+.sun b{position:absolute;left:96px;top:-34px;white-space:nowrap;font:400 10px var(--mono);letter-spacing:.12em;color:#fff;text-transform:uppercase}
+.sun i{position:absolute;left:-5px;top:-5px;width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 24px 8px rgba(255,214,140,.9)}
+.note{position:absolute;pointer-events:none;font:400 10px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);white-space:nowrap}
+.note::before{content:"";position:absolute;right:100%;top:7px;width:var(--lw,60px);height:1px;background:var(--ink);margin-right:8px}
+.note em{font:italic 400 15px/1 var(--serif);text-transform:none;letter-spacing:0;margin-right:6px}
+.note u{position:absolute;right:calc(100% + var(--lw,60px) + 6px);top:4px;width:7px;height:7px;border-radius:50%;background:var(--accent);text-decoration:none}
+
+.manifesto p{font-weight:350;font-variation-settings:"SOFT" 100}
+.manifesto p em{font-style:italic;color:var(--accent-2)}
+.marquee{background:linear-gradient(90deg,#2f56d6,#7fa6ee 55%,#ffc59a);color:#fff}
+.marquee span{font-family:var(--display);font-weight:600;letter-spacing:-.04em}
+.marquee span i{font-weight:300;opacity:.7}
+.specs dd{font-family:var(--display);font-weight:600}
+.cta h2{font:700 clamp(84px,17vw,300px)/.82 var(--display);letter-spacing:-.06em;color:#fff;text-shadow:0 4px 40px rgba(27,35,80,.25)}
+.cta h2 i{font-weight:300;color:var(--accent)}
+.cta p{color:var(--ink)}
+.btn{background:var(--accent-2);color:#fff}
+.btn:hover{background:var(--accent);color:var(--ink)}
+footer{background:#ece2d3}
+
+@media (max-width:760px){
+  .word{font-size:34vw}
+  .w1{top:calc(64px + 6vh - .1em)}
+  .w2{bottom:calc(26px + 8vh - .22em);left:6vw}
+  .alt,.note,.sun b{display:none}
+}
+@media (prefers-reduced-motion:reduce){ .wx .flow,.sun svg{animation:none} }
+</style>
+</head>
+<body>
+<canvas id="stage" aria-hidden="true"></canvas>
+<div id="split" aria-hidden="true"><span class="lab l">← Sky</span><span class="lab r">Forecast →</span><span id="gridTag">Grid 0px</span></div>
+<div id="hsplit" aria-hidden="true"></div>
+<div id="ring" aria-hidden="true"></div>
+<video id="src" src="media/cloud-loop.mp4" muted loop playsinline autoplay preload="auto" crossorigin="anonymous"></video>
+
+<header>
+  <div class="logo"><b>ASCII Atlas</b>Nº10</div>
+  <nav class="pages" aria-label="Issues"><a href="index.html"><span>07</span><b>Weightless</b></a><a href="unfold.html"><span>08</span><b>Unfold</b></a><a href="hello.html"><span>09</span><b>Hello</b></a><a href="updraft.html" aria-current="page"><span>10</span><b>Updraft</b></a><a href="biolume.html"><span>11</span><b>Biolume</b></a></nav>
+  <a class="r" href="#letter">Subscribe ↗</a>
+</header>
+
+<main>
+  <section class="hero" aria-label="Updraft">
+    <svg class="wx" id="wx" aria-hidden="true"></svg>
+    <div class="spread top" aria-hidden="true"><span>Every</span><span>cloud</span><span>is</span><span>a</span><span>river</span><span>of</span><span>air</span></div>
+    <h1 class="word w1">Up<span class="bl"></span></h1>
+    <div class="word w2" aria-hidden="true">draft<span class="bl"></span></div>
+    <div class="spread bot" aria-hidden="true"><span>standing</span><span>still</span><span>long</span><span>enough</span><span>to</span><span>see</span></div>
+
+    <div class="alt" id="alt" aria-hidden="true"><div class="mk" id="mkTop"><b>Tops 6.2 km</b></div><div class="mk" id="mkBase"><b>Base 1.1 km</b></div></div>
+    <div class="sun" id="sun" aria-hidden="true"><i></i><svg viewBox="-100 -100 200 200" id="sunDial"></svg><b>Sun elev. 14° · az 248°</b></div>
+    <div class="note" id="nTop" style="--lw:70px" aria-hidden="true"><u></u><em>Cauliflower tops</em>still convecting</div>
+    <div class="note" id="nCore" style="--lw:110px" aria-hidden="true"><u></u><em>Shadowed core</em>−4 EV</div>
+    <div class="note" id="nBase" style="--lw:80px" aria-hidden="true"><u></u><em>Flat base</em>condensation level</div>
+  </section>
+
+  <section class="panel manifesto" id="note">
+    <div class="kicker reveal">01 — Forecast</div>
+    <p class="reveal">A small cumulus weighs about as much as a hundred <em>elephants</em><sup>[01]</sup> — and still it floats, held up by warm air that <em>never stops rising.</em></p>
+    <div class="sig reveal"><span>[01] ≈ 500 tonnes of water droplets</span><span>Written looking up</span></div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div>
+    <span>Rise <i>/</i> Billow <i>/</i> Cast a shadow <i>/</i> Drift <i>/</i></span>
+    <span>Rise <i>/</i> Billow <i>/</i> Cast a shadow <i>/</i> Drift <i>/</i></span>
+  </div></div>
+
+  <section class="panel specs" id="readings">
+    <div class="kicker reveal">02 — Readings</div>
+    <dl class="reveal">
+      <div><dt>Weight</dt><dd>≈500<small>t</small></dd></div>
+      <div><dt>Cloud base</dt><dd>1.1<small>km</small></dd></div>
+      <div><dt>Tops</dt><dd>6.2<small>km</small></dd></div>
+      <div><dt>Lifespan</dt><dd>≈30<small>min</small></dd></div>
+    </dl>
+  </section>
+
+  <section class="cta" id="letter">
+    <h2 class="reveal">Look<br><i>up.</i></h2>
+    <div class="row reveal">
+      <p>Updraft — a weekly letter about weather, light and paying attention. One sky, one paragraph, every Sunday morning.</p>
+      <a class="btn" href="#letter">Get the cloud report <span>→</span></a>
+    </div>
+  </section>
+</main>
+<footer><span>ASCII Atlas Nº10 — Updraft</span><span>Fictional publication · design study</span><span>Cumulus congestus</span></footer>
+
+<script type="module">
+import { stage } from './engine.js';
+
+// Golden-hour sky, crepuscular rays, a duotone halftone screen and contour lines traced through the cloud's light.
+const FS = `
+float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3. - 2.*f);
+  return mix(mix(hash(i), hash(i + vec2(1, 0)), f.x), mix(hash(i + vec2(0, 1)), hash(i + vec2(1)), f.x), f.y); }
+float fbm(vec2 p){ float s = 0., a = .5; for (int i = 0; i < 5; i++){ s += a*vn(p); p = p*2.03 + 17.; a *= .5; } return s; }
+const vec2 SUN = vec2(.30, .86);                                     // in source uv: just behind the cloud's upper-left shoulder
+float sunGlow(vec2 c, float r){ vec2 d = (c - SUN)*vec2(1.5, 1.); return exp(-dot(d, d)/(r*r)); }
+
+vec3 field(vec2 uv, vec2 c){
+  float t = uTime;
+  vec3 col = mix(vec3(1., .74, .54), vec3(.52, .70, .95), smoothstep(.0, .55, uv.y));   // warm horizon → blue
+  col = mix(col, vec3(.16, .33, .80), smoothstep(.5, 1., uv.y));                         // → deep zenith
+  // domain-warped haze drifting with the wind
+  vec2 q = uv*vec2(uRes.x/uRes.y, 1.)*2.2;
+  float w = fbm(q + vec2(t*.04, 0.) + 1.6*fbm(q*.8 - vec2(t*.025, t*.01)));
+  col = mix(col, vec3(1., .96, .92), smoothstep(.45, .85, w)*.45);
+  col += vec3(1., .78, .45)*sunGlow(c, .22)*.55 + vec3(1., .9, .7)*sunGlow(c, .06)*.6;   // the sun behind it
+  float halo = msk(c, 5.);
+  col = mix(col, col*vec3(.86, .9, 1.05), halo*.25);                                     // cool shade around the volume
+  return col;
+}
+
+vec3 scene(vec2 fc){
+  float t = uTime;
+  vec2 uv = fc/uRes;
+  vec3 col = field(uv, cover(uv));
+  float cs = uCell * (1. + uDissolve*3.);
+  vec2 ctr = uRes*.5;
+
+  // halftone screen rotated 45°, anchored at the centre
+  const float A = .7854; mat2 R = mat2(cos(A), -sin(A), sin(A), cos(A));
+  vec2 g = R*(fc - ctr)/cs, id = floor(g), p = fract(g) - .5;
+  vec2 cuv = cover((transpose(R)*((id + .5)*cs)) /uRes + .5);
+  vec3 ic = img(cuv, 1.);
+  float l = dot(ic, LW);
+  float mm = smoothstep(.2, .8, msk(cuv, .5)) * (1. - uDissolve*.75);
+  float m = step(hash(id*1.37 + 3.1), mm);
+  float aa = 1.4/cs;
+  col = mix(col, mix(vec3(.86, .88, .97), vec3(1., .97, .91), smoothstep(.2, .9, l)), m*.9);     // paper of the cloud
+  float l2 = smoothstep(.12, .85, l);
+  float rS = .46*pow(1. - l2, 2.);                                                                // shadow dots: mid-tones stay light, only the deep folds go heavy
+  col = mix(col, mix(vec3(.16, .2, .5), vec3(.46, .54, .86), l2), smoothstep(rS + aa, rS - aa, length(p)) * m);
+  // a second, warmer screen at 15° for the sunlit highlights
+  const float B = .2618; mat2 R2 = mat2(cos(B), -sin(B), sin(B), cos(B));
+  vec2 g2 = R2*(fc - ctr)/(cs*.8), p2 = fract(g2) - .5;
+  float rH = .4*smoothstep(.6, 1., l);
+  col = mix(col, vec3(1., .72, .28), smoothstep(rH + aa, rH - aa, length(p2)) * m * .85);
+  return col;
+}
+
+// the untouched sky photo (left of the cursor)
+// the clip's backdrop is black, so brightness doubles as transparency: un-premultiply and lay the cloud over the sky —
+// wisps keep their true colour instead of dragging a dark rim
+vec3 cloudOver(vec3 sky, vec3 c, float m){
+  float a = smoothstep(.02, .5, max(c.r, max(c.g, c.b))) * smoothstep(.0, .35, m);
+  return mix(sky, c/max(a, .08), a);
+}
+vec3 photo(vec2 fc){ vec2 uv = fc/uRes, oc = cover(uv); return cloudOver(field(uv, oc), img(oc, 0.), msk(oc, 0.)); }
+
+void main(){
+  vec2 fc = gl_FragCoord.xy;
+  vec2 uv = fc/uRes;
+  vec2 d = uv - .5;
+  float md = length((uv - uMouse)*vec2(uRes.x/uRes.y, 1.));
+  vec2 off = d * uRes.y * (.007 + .012*smoothstep(.35, 0., md));
+  float side = step(uSplit*uRes.x, fc.x);
+  vec3 col = side > .5 ? vec3(scene(fc + off).r, scene(fc).g, scene(fc - off).b)
+                       : vec3(photo(fc + off*.6).r, photo(fc).g, photo(fc - off*.6).b);
+
+  vec2 c = cover(uv);
+  // contour lines through the cloud's (blurred) light: a topographic map of its volume, slowly flowing
+  float L = dot(img(c, 2.2), LW), f = L*16. - uTime*.12;
+  float iso = 1. - min(abs(fract(f - .5) - .5)/max(fwidth(f), 1e-4), 1.);
+  float cm = smoothstep(.3, .8, msk(c, 1.5)) * (1. - uDissolve);
+  col = mix(col, vec3(.12, .16, .42), iso * cm * .55 * side);
+
+  // crepuscular rays: march toward the sun, light gets through wherever the cloud doesn't
+  vec2 sd = SUN - c; float acc = 0.;
+  for (int i = 1; i <= 14; i++){ vec2 s = c + sd*float(i)/14.; acc += (1. - msk(s, 2.5)) * sunGlow(s, .35); }
+  float ang = atan(sd.y, sd.x);
+  float streaks = .55 + .45*vn(vec2(ang*24., uTime*.15));
+  col += vec3(1., .82, .55) * (acc/14.) * streaks * .35 * (1. - smoothstep(.4, .8, msk(c, 2.)));
+
+  // title: inverse of the blurred sky
+  float tm = texture(uText, uv).r;
+  if (tm > 0.){
+    vec3 sb = cloudOver(field(uv, c), img(c, 4.2), msk(c, 4.2));
+    col = mix(col, 1. - sb, tm);
+  }
+  col *= 1. - .1*pow(length(d*vec2(1.05, 1.25)), 2.);
+  col += (hash(fc + fract(uTime*7.)*91.) - .5) * .04;
+  outColor = vec4(col, 1.);
+}`;
+
+// ——— weather map ———
+const wx = document.getElementById('wx'), NS = 'http://www.w3.org/2000/svg';
+const mk = (tag, attrs = {}, parent = wx) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+let seed = 3; const rnd = () => (seed = (seed*16807) % 2147483647) / 2147483647;
+const NT = Array.from({length:64}, rnd);
+const wob = (a, k) => { const x = (a/(2*Math.PI))*8 + k*3.1; const i = Math.floor(x), f = x - i, s = f*f*(3 - 2*f);
+  return NT[((i % 8) + 8) % 8 + (k % 7)*8 % 56]*(1 - s) + NT[(((i + 1) % 8) + 8) % 8 + (k % 7)*8 % 56]*s; };
+const isos = [], flows = [];
+function buildMap(){
+  wx.replaceChildren(); isos.length = 0; flows.length = 0;
+  const W = innerWidth, H = innerHeight, cx = W*.16, cy = H*.34;
+  // isobars round a low behind the title: wobbly closed curves, labelled every other one
+  for (let k = 0; k < 16; k++){
+    const R = 40 + k*Math.max(W, H)*.055; let d = '';
+    for (let i = 0; i <= 96; i++){
+      const a = i/96*Math.PI*2, r = R*(1 + .14*(wob(a, k) - .5)*2 + .05*Math.sin(a*3 + k));
+      d += (i ? 'L' : 'M') + (cx + Math.cos(a)*r*1.25).toFixed(1) + ' ' + (cy + Math.sin(a)*r*.82).toFixed(1);
+    }
+    isos.push(mk('path', {class: 'iso' + (k % 3 === 2 ? ' b' : ''), d}));
+    if (k % 2 === 1){ const t = mk('text', {class:'iso-l', x: cx + R*1.25*Math.cos(-.5) + 4, y: cy + R*.82*Math.sin(-.5)}); t.textContent = 996 + k*2; }
+  }
+  mk('text', {class:'H', x: cx - 10, y: cy + 10}).textContent = 'L';
+  // streamlines: short curved runs through a swirling flow field, each with a moving dash
+  for (let n = 0; n < 70; n++){
+    let x = rnd()*W, y = rnd()*H, d = `M${x.toFixed(1)} ${y.toFixed(1)}`;
+    for (let s = 0; s < 22; s++){
+      const dx = x - cx, dy = y - cy, r = Math.hypot(dx, dy) + 1;
+      const ang = Math.atan2(dy, dx) + Math.PI/2 + .35 + .6*(wob(x*.004, 3) - .5);
+      const sp = 9 + 6*Math.min(260/r, 1);
+      x += Math.cos(ang)*sp + 5; y += Math.sin(ang)*sp*.7; d += `L${x.toFixed(1)} ${y.toFixed(1)}`;
+    }
+    flows.push(mk('path', {class: 'flow' + (n % 4 === 0 ? ' b' : ''), d, style:`--fd:${(3 + rnd()*4).toFixed(2)}s;--dl:${(-rnd()*6).toFixed(2)}s`}));
+  }
+}
+buildMap(); addEventListener('resize', buildMap);
+
+// altitude scale: dense ticks, labelled every km
+const alt = document.getElementById('alt');
+for (let i = 0; i <= 120; i++){
+  const y = 100 - i/120*100, tick = document.createElement('i');
+  tick.style.cssText = `top:${y}%;width:${i % 10 === 0 ? 20 : i % 5 === 0 ? 12 : 6}px`; alt.appendChild(tick);
+  if (i % 20 === 0){ const s = document.createElement('span'); s.style.top = `${y}%`; s.textContent = `${i/10} km`; alt.appendChild(s); }
+}
+// sun protractor
+const dial = document.getElementById('sunDial');
+for (let i = 0; i < 90; i++){
+  const a = i*4*Math.PI/180, r0 = i % 5 ? 92 : 84, l = document.createElementNS(NS, 'line');
+  [['x1', Math.cos(a)*r0], ['y1', Math.sin(a)*r0], ['x2', Math.cos(a)*100], ['y2', Math.sin(a)*100]].forEach(([k, v]) => l.setAttribute(k, v.toFixed(1)));
+  dial.appendChild(l);
+}
+[60, 40].forEach(r => { const c = document.createElementNS(NS, 'circle'); c.setAttribute('r', r); dial.appendChild(c); });
+
+// subject geometry in source uv (GL, y up) — measured on media/cloud-loop.mp4
+const BOX = { t: .90, b: .12 }, SUN = [.30, .86];
+const NOTES = { nTop: [.56, .84], nCore: [.55, .5], nBase: [.5, .17] };
+const sun = document.getElementById('sun'), mkTop = document.getElementById('mkTop'), mkBase = document.getElementById('mkBase');
+const notes = Object.entries(NOTES).map(([id, uv]) => [document.getElementById(id), uv]);
+stage({ fs: FS, focus: [0.58, 0.5], cell: [4, 38], onFrame({toScreen}){
+  const s = toScreen(...SUN); sun.style.transform = `translate(${s.x}px,${s.y}px)`;
+  const r = alt.getBoundingClientRect(), pct = y => `${((y - r.top)/r.height*100).toFixed(2)}%`;
+  mkTop.style.top = pct(toScreen(.5, BOX.t).y); mkBase.style.top = pct(toScreen(.5, BOX.b).y);
+  for (const [el, uv] of notes){ const q = toScreen(...uv); el.style.transform = `translate(${q.x + parseFloat(el.style.getPropertyValue('--lw')) + 14}px,${q.y - 7}px)`; }
+}});
+</script>
+</body>
+</html>

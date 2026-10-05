@@ -1,0 +1,7 @@
+{
+  "image": "A single towering cumulus cloud, dramatic and sculptural, photographed like a fine-art studio still life floating against a perfectly flat pure black backdrop. Strong directional golden sunlight from the upper left carves deep volume: brilliant sunlit billows with warm cream highlights, cool blue-grey shadows deep in the folds, a darker flatter base. The cloud sits right of centre and fills about two thirds of the frame height, leaving empty space on the left. Ultra detailed, high dynamic range. Pure black backdrop (#000000) filling every edge of the frame — no sky, no ground, no stars, nothing else.",
+  "video": "Time-lapse of the cumulus cloud, alive with constant, clearly visible motion the whole time: the billows churn, roll and swell, towers bubble upward and spread out, wisps tear off the edges and evaporate while new puffs boil up in their place, and light and shadow travel across the volume as the whole cloud slowly turns. Energetic and continuous, then it settles back into its original shape. Locked camera. The background stays pure black. No new objects, no cuts.",
+  "duration": "15",
+  "cfg": 0.7,
+  "negative": "static, frozen, still image, slow motion, camera movement, cut, new objects, blue sky, ground, text, background change, distortion, low quality"
+}

@@ -1,0 +1,7 @@
+{
+  "edit": "Replace the background with a perfectly flat, pure black backdrop (#000000) filling every edge of the frame — no gradient, no glow, no stars, nothing else. Keep the astronaut exactly as it is: same helmet, suit, pose, framing, lighting and the stars reflected in the visor. Clean, crisp edges around the suit.",
+  "video": "A calm, weightless float. The astronaut drifts very slowly, rising and sinking gently, and the whole helmet and shoulders tilt noticeably — rolling slowly to one side by about ten to fifteen degrees, easing back past centre into a smaller tilt the other way, then settling — unhurried, slightly uneven, like a body turning freely in zero gravity. Nothing sudden. The camera slowly and smoothly zooms out to a medium shot that shows the shoulders and upper chest of the suit, then gently zooms back in to the original close-up. Stars reflected in the visor glint softly. The flat pure black backdrop stays uniform. No new objects, no cuts.",
+  "duration": "15",
+  "cfg": 0.8,
+  "negative": "fast motion, sudden movement, big head turn, spinning, mechanical, robotic, static, frozen, shaking, jitter, cut, new objects, background change, flicker, distortion, low quality"
+}

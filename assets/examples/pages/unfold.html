@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unfold</title>
+<meta name="description" content="Unfold — a field guide to slow things. ASCII Atlas Nº08.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+:root{
+  --bg:#f1efea;                  /* cotton paper */
+  --ink:#151513;
+  --ink-dim:rgba(21,21,19,.56);
+  --hair:rgba(21,21,19,.16);
+  --accent:#ff5a1f;              /* poppy */
+  --accent-2:#2f45ff;            /* cool counterweight */
+  --pollen:#f2c230;
+  --panel:rgba(241,239,234,.9);
+  --line:rgba(21,21,19,.62);
+  --line-glow:rgba(255,255,255,.7);
+  --tag-bg:rgba(241,239,234,.75);
+  --cta-fade:rgba(241,239,234,.94);
+  --display:"Bricolage Grotesque", "Geist", sans-serif;
+  --serif:"Instrument Serif", "Times New Roman", serif;
+  --mono:"Geist Mono", ui-monospace, monospace;
+  --sans:"Geist", system-ui, sans-serif;
+}
+.fallback .hero,.fallback .cta{background:url(media/poppy-poster.jpg) 60% 50%/cover}
+.spread{font-style:italic;font-size:clamp(13px,1.25vw,18px)}
+.word{font-family:var(--display);font-weight:700;font-size:max(27vw,19vh);letter-spacing:-.065em;color:var(--ink);font-optical-sizing:auto}
+.w1{top:calc(64px + 2vh - .1em);left:-1.4vw}
+.w2{bottom:calc(26px + 3vh - .22em);right:-2.6vw}
+#ring::after{background:var(--accent)}
+#gridTag{color:var(--ink)}
+
+/* ——— seed head: golden-angle phyllotaxis behind the title ——— */
+.seed{position:absolute;pointer-events:none;width:min(50vw,720px);aspect-ratio:1;left:-9vw;top:-17vh;opacity:.8;
+  transform:translate(calc(var(--mx,0) * 18px),calc(var(--my,0) * -12px))}
+.seed svg{width:100%;height:100%;overflow:visible;animation:spin 240s linear infinite}
+.seed .d{fill:rgba(21,21,19,.62);opacity:0;animation:pop .8s cubic-bezier(.2,.8,.2,1) forwards,breathe 6s ease-in-out infinite;animation-delay:var(--dl),calc(var(--dl) + .8s);
+  transform-box:fill-box;transform-origin:center}
+.seed .o{fill:none;stroke:var(--ink);stroke-width:1;vector-effect:non-scaling-stroke;opacity:0;animation:pop .8s ease forwards;animation-delay:var(--dl)}
+.seed .hot{fill:var(--accent)}
+.seed .cool{fill:var(--accent-2)}
+.seed path{fill:none;stroke:rgba(21,21,19,.2);stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:var(--len);stroke-dashoffset:var(--len);
+  animation:draw 3.2s cubic-bezier(.6,.1,.2,1) forwards;animation-delay:var(--dl)}
+.seed path.arm{stroke:rgba(255,90,31,.45)}
+.seed circle.guide{fill:none;stroke:rgba(21,21,19,.14);stroke-width:1;stroke-dasharray:2 6;vector-effect:non-scaling-stroke}
+@keyframes pop{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(.55)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+/* ——— specimen sheet: callouts that follow the flower ——— */
+.sheet{position:absolute;inset:0;pointer-events:none;font:400 10px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+.dial{position:absolute;border-radius:50%;transform:translate(-50%,-50%);border:1px solid var(--hair)}
+.dial svg{position:absolute;inset:-6%;width:112%;height:112%;overflow:visible;animation:spin 120s linear infinite reverse}
+.dial svg line{stroke:var(--ink);stroke-width:1;vector-effect:non-scaling-stroke;opacity:.35}
+.dial svg line.major{opacity:.7}
+.dial b{position:absolute;left:50%;top:-22px;transform:translateX(-50%);font-weight:400;color:var(--accent);white-space:nowrap}
+.call{position:absolute;width:0;height:0}
+.call i{position:absolute;left:-6px;top:-6px;width:12px;height:12px;border-radius:50%;border:1px solid var(--ink);background:rgba(241,239,234,.4)}
+.call i::after{content:"";position:absolute;left:3.5px;top:3.5px;width:3px;height:3px;border-radius:50%;background:var(--accent)}
+.call svg{position:absolute;left:0;top:0;overflow:visible}
+.call svg path{fill:none;stroke:var(--ink);stroke-width:1;opacity:.55}
+.call span{position:absolute;white-space:nowrap;padding:4px 7px;background:rgba(241,239,234,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid var(--hair)}
+.call span em{font:italic 400 14px/1 var(--serif);text-transform:none;letter-spacing:0;margin-right:6px}
+.call.l span{right:var(--lx);top:var(--ly)}
+.call.r span{left:var(--lx);top:var(--ly)}
+.scale{position:absolute;left:var(--gutter);bottom:76px;display:flex;align-items:flex-end;gap:0}
+.scale u{display:block;width:44px;height:6px;border:1px solid var(--ink);border-top:0;text-decoration:none;position:relative}
+.scale u:nth-child(odd){background:var(--ink)}
+.scale u::after{content:attr(data-n);position:absolute;left:-3px;top:10px}
+.label{position:absolute;right:var(--gutter);top:44%;width:200px;padding:12px 14px;border:1px solid var(--ink);background:rgba(241,239,234,.6);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);line-height:1.7}
+.label em{display:block;font:italic 400 22px/1.05 var(--serif);text-transform:none;letter-spacing:0;margin:2px 0 8px}
+.label hr{border:0;border-top:1px solid var(--hair);margin:8px 0}
+
+.manifesto p{font-family:var(--serif)}
+.manifesto p em{font-style:italic;color:var(--accent)}
+.marquee{background:var(--accent-2);color:var(--bg)}
+.marquee span{font-family:var(--display);font-weight:700;letter-spacing:-.05em}
+.marquee span i{font:italic 400 1em var(--serif);letter-spacing:0;color:#ffd3c2}
+.specs dd{font-family:var(--display);font-weight:600;letter-spacing:-.05em}
+.cta h2{font:700 clamp(84px,17vw,300px)/.8 var(--display);letter-spacing:-.07em}
+.cta h2 i{font:italic 400 1em var(--serif);letter-spacing:-.02em;color:var(--accent)}
+.btn:hover{color:#fff}
+footer{background:#e7e4dc}
+
+@media (max-width:760px){
+  .word{font-size:38vw}
+  .w1{top:calc(64px + 6vh - .1em)}
+  .w2{bottom:calc(26px + 8vh - .22em)}
+  .seed{width:120vw;left:-30vw;top:-8vh}
+  .label,.call span,.dial b{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .seed svg,.seed *,.dial svg{animation:none!important;opacity:1}
+  .seed path{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<canvas id="stage" aria-hidden="true"></canvas>
+<div id="split" aria-hidden="true"><span class="lab l">← Specimen</span><span class="lab r">Signal →</span><span id="gridTag">Grid 0px</span></div>
+<div id="hsplit" aria-hidden="true"></div>
+<div id="ring" aria-hidden="true"></div>
+<video id="src" src="media/poppy-loop.mp4" muted loop playsinline autoplay preload="auto" crossorigin="anonymous"></video>
+
+<header>
+  <div class="logo"><b>ASCII Atlas</b>Nº08</div>
+  <nav class="pages" aria-label="Issues"><a href="index.html"><span>07</span><b>Weightless</b></a><a href="unfold.html" aria-current="page"><span>08</span><b>Unfold</b></a><a href="hello.html"><span>09</span><b>Hello</b></a><a href="updraft.html"><span>10</span><b>Updraft</b></a><a href="biolume.html"><span>11</span><b>Biolume</b></a></nav>
+  <a class="r" href="#join">Waitlist ↗</a>
+</header>
+
+<main>
+  <section class="hero" aria-label="Unfold">
+    <div class="seed" aria-hidden="true"><svg id="seed" viewBox="-100 -100 200 200"></svg></div>
+    <div class="spread top" aria-hidden="true"><span>Every</span><span>poppy</span><span>arrives</span><span>folded</span><span>like</span><span>a</span><span>letter</span></div>
+    <h1 class="word w1">un<span class="bl"></span></h1>
+    <div class="word w2" aria-hidden="true">fold<span class="bl"></span></div>
+    <div class="spread bot" aria-hidden="true"><span>It</span><span>takes</span><span>one</span><span>slow</span><span>morning</span><span>to</span><span>read</span></div>
+
+    <div class="sheet" aria-hidden="true">
+      <div class="dial" id="dial"><svg id="ticks" viewBox="-100 -100 200 200"></svg><b>137.5° — the golden angle</b></div>
+      <div class="call r" id="cStigma" style="--lx:64px;--ly:-58px"><i></i><svg><path d="M6 -6 L48 -48 L64 -48"/></svg><span><em>Stigma</em>a rayed disc</span></div>
+      <div class="call r" id="cStamen" style="--lx:76px;--ly:30px"><i></i><svg><path d="M6 6 L44 44 L76 44"/></svg><span><em>Stamens</em>a crown of gold</span></div>
+      <div class="call l" id="cPetal" style="--lx:70px;--ly:-74px"><i></i><svg><path d="M-6 -6 L-40 -60 L-70 -60"/></svg><span><em>Petal</em>creased in the bud</span></div>
+      <div class="call r" id="cStem" style="--lx:58px;--ly:-12px"><i></i><svg><path d="M6 0 L58 0"/></svg><span><em>Stem</em>hirsute, nods when young</span></div>
+      <div class="scale"><u data-n="0"></u><u data-n="1"></u><u data-n="2"></u><u data-n="3"></u><span style="margin-left:14px">cm</span></div>
+      <div class="label">Specimen Nº08<em>Papaver nudicaule</em>Iceland poppy<hr>Coll. 03.10.2026<br>Studio light · 5600 K</div>
+    </div>
+  </section>
+
+  <section class="panel manifesto" id="note">
+    <div class="kicker reveal">01 — Field note</div>
+    <p class="reveal">A poppy spends weeks <em>crumpled</em> inside a hairy bud, then irons itself out in a single morning<sup>[01]</sup>. The creases stay. <em>That’s the point.</em></p>
+    <div class="sig reveal"><span>[01] Petals emerge folded like tissue paper</span><span>Written in direct sunlight</span></div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div>
+    <span>Crumple <i>·</i> Unfold <i>·</i> Hold the light <i>·</i> Let go <i>·</i></span>
+    <span>Crumple <i>·</i> Unfold <i>·</i> Hold the light <i>·</i> Let go <i>·</i></span>
+  </div></div>
+
+  <section class="panel specs" id="anatomy">
+    <div class="kicker reveal">02 — Anatomy of a morning</div>
+    <dl class="reveal">
+      <div><dt>Petals</dt><dd>4</dd></div>
+      <div><dt>Time to open</dt><dd>1<small>morning</small></dd></div>
+      <div><dt>In bloom</dt><dd>3–5<small>days</small></dd></div>
+      <div><dt>Creases ironed out</dt><dd>0</dd></div>
+    </dl>
+  </section>
+
+  <section class="cta" id="join">
+    <h2 class="reveal">Open<br><i>slowly.</i></h2>
+    <div class="row reveal">
+      <p>Unfold — a field guide to slow things. Pressed flowers, long reads, no notifications. Printed on cotton paper, arriving spring 2027.</p>
+      <a class="btn" href="#join">Join the waitlist <span>→</span></a>
+    </div>
+  </section>
+</main>
+<footer><span>ASCII Atlas Nº08 — Unfold</span><span>Fictional publication · design study</span><span>Papaver nudicaule</span></footer>
+
+<script type="module">
+import { stage } from './engine.js';
+
+// Light mode: ink on cotton paper. Glyphs are drawn with distance fields so they stay soft and round.
+const FS = `
+float disc(vec2 q, float r, float aa){ return smoothstep(r + aa, r - aa, length(q)); }
+float ring(vec2 q, float r, float w, float aa){ return smoothstep(w + aa, w - aa, abs(length(q) - r)); }
+float seg(vec2 q, vec2 a, vec2 b, float w, float aa){ vec2 pa = q - a, ba = b - a; float h = clamp(dot(pa, ba)/dot(ba, ba), 0., 1.); return smoothstep(w + aa, w - aa, length(pa - ba*h)); }
+
+// organic glyph ramp: · ○ ◉ ✱ ✿ ●
+float glyph(vec2 p, float v, float aa){
+  vec2 q = p - .5;
+  if (v < .14) return 0.;
+  if (v < .28) return disc(q, .1, aa);
+  if (v < .42) return ring(q, .24, .05, aa);
+  if (v < .56) return max(ring(q, .32, .05, aa), disc(q, .1, aa));
+  if (v < .70){ float s = 0.; for (int i = 0; i < 3; i++){ float a = float(i)*1.0472 + .26; vec2 d = vec2(cos(a), sin(a))*.38; s = max(s, seg(q, -d, d, .05, aa)); } return s; }
+  if (v < .85){ float s = disc(q, .08, aa); for (int i = 0; i < 5; i++){ float a = float(i)*1.2566 + .3; s = max(s, ring(q - vec2(cos(a), sin(a))*.25, .12, .045, aa)); } return s; }
+  return disc(q, .42, aa);
+}
+
+// paper with soft pastel washes: peach sun top-right, sage low-left, a cool blue counterweight on the right
+vec3 field(vec2 uv, vec2 c){
+  float t = uTime;
+  vec3 col = vec3(.952, .944, .925);
+  col = mix(col, vec3(1., .74, .58), blob(uv, vec2(.90, .98) + .03*vec2(sin(t*.21), cos(t*.17)), .46) * .7);
+  col = mix(col, vec3(.74, .86, .74), blob(uv, vec2(.02, .06) + .03*vec2(cos(t*.19), sin(t*.23)), .44) * .7);
+  col = mix(col, vec3(.70, .76, 1.), blob(uv, vec2(1.05, .26) + .03*vec2(cos(t*.23), sin(t*.29)), .30) * .75);
+  col = mix(col, vec3(1., .91, .62), blob(uv, vec2(.28, .96) + .02*vec2(sin(t*.15), cos(t*.2)), .26) * .45);
+  float halo = msk(c, 5.2);
+  col = mix(col, vec3(1., .80, .66), halo*.42);                             // warm aura around the flower
+  vec3 ghost = img(c, 3.6);
+  col = mix(col, col*mix(vec3(1.), ghost*1.04, .55), halo*.55);
+  col -= (hash(floor(uv*uRes/2.)) - .5)*.02;                                // paper tooth
+  return col;
+}
+
+vec3 scene(vec2 fc){
+  float t = uTime;
+  vec2 uv = fc/uRes;
+  vec3 col = field(uv, cover(warp(uv)));
+
+  // glyph grid, anchored at the screen centre
+  float cs = uCell * (1. + uDissolve*3.);
+  vec2 ctr = uRes*.5;
+  float row = floor((fc.y - ctr.y)/cs);
+  float shift = step(.98, hash(vec2(row, floor(t*2.)))) * (hash(vec2(row, 7.1)) - .5) * cs * 8.;
+  vec2 gfc = fc - ctr + vec2(shift, 0.);
+  vec2 id = floor(gfc/cs);
+  vec2 p = fract(gfc/cs);
+  vec2 cuv = cover(warp(((id + .5)*cs - vec2(shift, 0.) + ctr)/uRes));
+  vec3 ic = img(cuv, 1.2);
+  float l = dot(ic, LW);
+  float sat = max(ic.r, max(ic.g, ic.b)) - min(ic.r, min(ic.g, ic.b));
+  float ink = clamp(sat*.8 + (1. - l)*.8 - .1, 0., 1.);               // saturated or dark → more ink
+  float mm = smoothstep(.22, .85, msk(cuv, .5)) * (1. - uDissolve*.75);
+  float m = step(hash(id*1.37 + 3.1), mm);
+  float tw = hash(id + floor(t*4. + hash(id)*4.));
+
+  col = mix(col, ic, m*.15);                                            // faint colour block under the glyphs
+  vec3 gi = max(mix(vec3(dot(ic, LW)), ic, 1.4)*.8, 0.);                // the flower's own colour, deeper
+  gi = mix(gi, vec3(.08, .08, .09), smoothstep(.38, .05, l));            // shadows print in black
+  col = mix(col, gi, glyph(p, ink + (tw - .5)*.08, 1.3/cs) * m * .94);
+
+  // stray ink dashes in the margins
+  float streak = step(.994, hash(vec2(row, floor(t*.6)))) * step(.5, fract(gfc.x/cs*.5)) * box(p, vec2(0., .46), vec2(1., .54));
+  col = mix(col, vec3(.08), streak*.5*(1. - mm));
+  return col;
+}
+
+// the untouched specimen photo (left of the cursor)
+vec3 photo(vec2 fc){ vec2 uv = fc/uRes, oc = cover(uv); return mix(field(uv, oc), img(oc, 0.), smoothstep(.05, .6, msk(oc, 0.))); }
+
+void main(){
+  vec2 fc = gl_FragCoord.xy;
+  vec2 uv = fc/uRes;
+  vec2 d = uv - .5;
+  float md = length((uv - uMouse)*vec2(uRes.x/uRes.y, 1.));
+  vec2 c = cover(warp(uv));
+  float subj = msk(c, 3.);
+  vec2 off = d * uRes.y * (.022 + .02*smoothstep(.35, 0., md)) * mix(1.25, 1., subj);  // misregistration — stronger than the photo side
+  vec3 col = vec3(scene(fc + off).r, scene(fc).g, scene(fc - off).b);
+
+  // left of the cursor: the specimen photo, with a stronger colour split than the glyph side
+  vec2 oc = cover(uv);
+  vec2 offP = d * uRes.y * (.014 + .014*smoothstep(.35, 0., md));
+  vec3 orig = vec3(photo(fc + offP).r, photo(fc).g, photo(fc - offP).b);
+  col = mix(orig, col, step(uSplit*uRes.x, fc.x));
+  col *= 1. - .07*pow(length(d*vec2(1.05, 1.25)), 2.);
+
+  // title: inverse of a blurred backdrop — near-black on paper, electric blue over the petals
+  float tm = texture(uText, uv).r;
+  if (tm > 0.){
+    vec3 sbE = field(uv, c);
+    sbE = mix(sbE, mix(sbE, img(c, 4.2), .55), msk(c, 4.2)*.8);
+    vec3 sbO = mix(field(uv, oc), img(oc, 4.2), smoothstep(.05, .6, msk(oc, 4.2)));
+    col = mix(col, 1. - mix(sbO, sbE, step(uSplit*uRes.x, fc.x)), tm);
+  }
+  col += (hash(fc + fract(uTime*7.)*91.) - .5) * .045;                      // grain
+  outColor = vec4(col, 1.);
+}`;
+
+// specimen callouts, in source uv (GL, y up) — measured on media/poppy-loop.mp4
+const PARTS = { cStigma:[.589,.517], cStamen:[.665,.465], cPetal:[.405,.68], cStem:[.875,.2] };
+const CENTRE = [.585, .52], BLOOM_R = .37;
+const dial = document.getElementById('dial');
+const calls = Object.entries(PARTS).map(([id, uv]) => [document.getElementById(id), uv]);
+stage({ fs: FS, focus: [0.6, 0.5], cell: [3, 34], onFrame({toScreen}){
+  const s = toScreen(...CENTRE), r = BLOOM_R*s.scale;
+  dial.style.cssText = `left:${s.x}px;top:${s.y}px;width:${r*2}px;height:${r*2}px`;
+  for (const [el, uv] of calls){ const q = toScreen(...uv); el.style.transform = `translate(${q.x}px,${q.y}px)`; }
+}});
+
+// ——— seed head: 233 florets on the golden angle, parastichy arms drawn through them ———
+(function seedHead(){
+  const svg = document.getElementById('seed'), NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); svg.appendChild(e); return e; };
+  const GA = Math.PI*(3 - Math.sqrt(5)), N = 233, K = 6.2;
+  const pt = n => [Math.cos(n*GA)*K*Math.sqrt(n), Math.sin(n*GA)*K*Math.sqrt(n)];
+  [30, 60, 94].forEach(r => el('circle', {class:'guide', cx:0, cy:0, r}));
+  // parastichies: every 21st and 34th floret line up into spiral arms
+  [[21, 6, ''], [34, 5, 'arm']].forEach(([step, count, cls], j) => {
+    for (let a = 0; a < count; a++){
+      let d = '', len = 0, prev;
+      for (let n = a*Math.floor(step/count) + 1; n < N; n += step){
+        const [x, y] = pt(n); d += (d ? 'L' : 'M') + x.toFixed(2) + ' ' + y.toFixed(2);
+        if (prev) len += Math.hypot(x - prev[0], y - prev[1]); prev = [x, y];
+      }
+      el('path', {d, class:cls, style:`--len:${len.toFixed(0)};--dl:${(1 + j*.6 + a*.25).toFixed(2)}s`});
+    }
+  });
+  for (let n = 1; n < N; n++){
+    const [x, y] = pt(n), dl = `--dl:${(n*.006).toFixed(3)}s`;
+    if (n % 55 === 0) el('circle', {class:'o', cx:x.toFixed(2), cy:y.toFixed(2), r:3.2, style:dl});
+    const cls = n % 89 === 0 ? 'd cool' : n % 34 === 0 ? 'd hot' : 'd';
+    el('circle', {class:cls, cx:x.toFixed(2), cy:y.toFixed(2), r:(.35 + n/N*.8).toFixed(2), style:dl});
+  }
+})();
+
+// ——— dial: 72 ticks, the golden angle marked ———
+(function ticks(){
+  const svg = document.getElementById('ticks'), NS = 'http://www.w3.org/2000/svg';
+  for (let i = 0; i < 72; i++){
+    const a = i*5*Math.PI/180, major = i % 6 === 0, r0 = major ? 92 : 95;
+    const l = document.createElementNS(NS, 'line');
+    Object.entries({x1:Math.cos(a)*r0, y1:Math.sin(a)*r0, x2:Math.cos(a)*100, y2:Math.sin(a)*100, class: major ? 'major' : ''}).forEach(([k, v]) => l.setAttribute(k, v));
+    svg.appendChild(l);
+  }
+  const g = 137.5*Math.PI/180, l = document.createElementNS(NS, 'line');
+  Object.entries({x1:0, y1:0, x2:Math.cos(g)*100, y2:Math.sin(g)*100, style:'stroke:#ff5a1f;opacity:.9'}).forEach(([k, v]) => l.setAttribute(k, v));
+  svg.appendChild(l);
+})();
+</script>
+</body>
+</html>

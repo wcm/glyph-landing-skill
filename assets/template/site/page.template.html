@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{NAME}}</title>
+<meta name="description" content="{{NAME}} — EDIT: one sentence for search and link previews.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- EDIT: the page's fonts (display for the title, a body face, a mono for labels, plus any glyph-atlas font) -->
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;600;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+/* EDIT: the look. Every token below is used by base.css; see references/looks.md */
+:root{
+  --bg:#07080c;
+  --ink:#eef0f5;
+  --ink-dim:rgba(238,240,245,.6);
+  --hair:rgba(238,240,245,.22);
+  --accent:#ffb347;
+  --accent-2:#5b8cff;
+  --panel:rgba(7,8,12,.94);
+  --line:rgba(238,240,245,.75);
+  --line-glow:rgba(91,140,255,.5);
+  --tag-bg:rgba(7,8,12,.6);
+  --cta-fade:rgba(7,8,12,.92);
+  --display:"Inter Tight", system-ui, sans-serif;
+  --serif:"Inter Tight", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, monospace;
+  --sans:"Inter Tight", system-ui, sans-serif;
+}
+.fallback .hero,.fallback .cta{background:url(media/{{ID}}-poster.jpg) 60% 50%/cover}
+/* EDIT: title type, size and placement — the shader draws these words (inverse of a blurred backdrop) */
+.word{font-family:var(--display);font-weight:800;font-size:max(24vw,17vh);letter-spacing:-.05em;color:var(--ink)}
+.w1{top:calc(64px + 3vh - .1em);left:-1vw}
+.w2{bottom:calc(26px + 4vh - .22em);left:14vw}
+/* EDIT: line art for this page (see references/looks.md → "Line work") */
+.art{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.art line,.art path,.art circle{fill:none;stroke:var(--hair);stroke-width:1;vector-effect:non-scaling-stroke}
+.manifesto p em{font-style:italic;color:var(--accent)}
+.marquee{background:var(--accent);color:var(--bg)}
+.cta h2{font:800 clamp(64px,15vw,260px)/.84 var(--display);letter-spacing:-.06em}
+.cta h2 i{color:var(--accent)}
+@media (max-width:760px){
+  .word{font-size:33vw}
+  .w1{top:calc(64px + 6vh - .1em)}
+  .w2{bottom:calc(26px + 8vh - .22em);left:6vw}
+  .cta h2{font-size:17vw}            /* a CTA wider than the phone makes the whole page scroll sideways */
+}
+</style>
+</head>
+<body>
+<canvas id="stage" aria-hidden="true"></canvas>
+<div id="split" aria-hidden="true"><span class="lab l">← Photo</span><span class="lab r">Glyphs →</span><span id="gridTag">Grid 0px</span></div>
+<div id="hsplit" aria-hidden="true"></div>
+<div id="ring" aria-hidden="true"></div>
+<video id="src" src="media/{{ID}}-loop.mp4" muted loop playsinline autoplay preload="auto" crossorigin="anonymous"></video>
+
+<header>
+  <div class="logo"><b>EDIT Series</b>Nº{{NO}}</div>
+  <nav class="pages" aria-label="Pages" data-auto></nav>
+  <a class="r" href="#cta">EDIT ↗</a>
+</header>
+
+<main>
+  <section class="hero" aria-label="{{NAME}}">
+    <svg class="art" id="art" aria-hidden="true"></svg>
+    <!-- EDIT: two short sentences, one word per span; they spread across the full width -->
+    <div class="spread top" aria-hidden="true"><span>EDIT</span><span>a</span><span>sentence</span><span>across</span><span>the</span><span>top</span></div>
+    <!-- EDIT: one word split in two; the .bl span is the baseline probe for the shader's text mask — keep it -->
+    <h1 class="word w1">{{WORD1}}<span class="bl"></span></h1>
+    <div class="word w2" aria-hidden="true">{{WORD2}}<span class="bl"></span></div>
+    <div class="spread bot" aria-hidden="true"><span>and</span><span>its</span><span>answer</span><span>along</span><span>the</span><span>bottom</span></div>
+  </section>
+
+  <section class="panel manifesto" id="note">
+    <div class="kicker reveal">01 — EDIT</div>
+    <p class="reveal">EDIT: one or two sentences with a true, surprising fact about the subject<sup>[01]</sup> and a <em>turn</em> that makes it about the reader.</p>
+    <div class="sig reveal"><span>[01] EDIT: the footnote</span><span>EDIT: a playful sign-off</span></div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div>
+    <span>EDIT <i>·</i> four <i>·</i> short <i>·</i> verbs <i>·</i></span>
+    <span>EDIT <i>·</i> four <i>·</i> short <i>·</i> verbs <i>·</i></span>
+  </div></div>
+
+  <section class="panel specs" id="specs">
+    <div class="kicker reveal">02 — EDIT</div>
+    <dl class="reveal">
+      <div><dt>EDIT</dt><dd>0<small>unit</small></dd></div>
+      <div><dt>EDIT</dt><dd>0</dd></div>
+      <div><dt>EDIT</dt><dd>0</dd></div>
+      <div><dt>EDIT</dt><dd>0</dd></div>
+    </dl>
+  </section>
+
+  <section class="cta" id="cta">
+    <h2 class="reveal">EDIT<br><i>ending.</i></h2>
+    <div class="row reveal">
+      <p>EDIT: what this fictional (or real) thing is, in one line, and the invitation.</p>
+      <a class="btn" href="#cta">EDIT action <span>→</span></a>
+    </div>
+  </section>
+</main>
+<footer><span>Nº{{NO}} — {{NAME}}</span><span>EDIT</span><span>EDIT</span></footer>
+
+<script type="module">
+import { stage } from './engine.js';
+
+// EDIT: the look in GLSL — field() is the backdrop, scene() the glyph layer, main() fringing, photo side, title and finish.
+// Helpers from engine.js: hash, cover, warp, img(c, lod), msk(c, lod), blob, box, atlas(p, i), LW and the u* uniforms.
+// references/shader-recipes.md has drop-in backgrounds, glyph renderers and finishing effects.
+const FS = `
+vec3 field(vec2 uv, vec2 c){
+  float t = uTime;
+  vec3 col = mix(vec3(.02, .02, .04), vec3(.05, .06, .12), uv.y);
+  col += vec3(.20, .30, .80) * blob(uv, vec2(.1 + .05*sin(t*.2), .6), .5) * .6;
+  col += vec3(.95, .55, .20) * blob(uv, vec2(1.02, .2 + .04*cos(t*.17)), .35) * .6;
+  float halo = msk(c, 5.);
+  col += vec3(.25, .3, .6) * halo * .35;
+  return col;
+}
+
+vec3 scene(vec2 fc){
+  float t = uTime;
+  vec2 uv = fc/uRes;
+  vec3 col = field(uv, cover(uv));
+  float cs = uCell * (1. + uDissolve*3.);
+  vec2 ctr = uRes*.5, gfc = fc - ctr, id = floor(gfc/cs), p = fract(gfc/cs);   // grid anchored at the centre
+  vec2 cuv = cover(((id + .5)*cs + ctr)/uRes);
+  vec3 ic = img(cuv, 1.);
+  float l = smoothstep(.04, .92, dot(ic, LW));
+  float m = step(hash(id*1.37 + 3.1), smoothstep(.22, .85, msk(cuv, .5)) * (1. - uDissolve*.75));   // dithered edge
+  float tw = hash(id + floor(t*5. + hash(id)*5.));
+  col = mix(col, col*.3, m*.7);
+  col += mix(vec3(.95), ic*1.3, .45) * atlas(p, clamp(l + (tw - .5)*.06, 0., .999)*uAtlasN) * m;
+  return col;
+}
+
+vec3 photo(vec2 fc){ vec2 uv = fc/uRes, oc = cover(uv); return mix(field(uv, oc), img(oc, 0.), smoothstep(.05, .6, msk(oc, 0.))); }
+
+void main(){
+  vec2 fc = gl_FragCoord.xy, uv = fc/uRes, d = uv - .5;
+  float md = length((uv - uMouse)*vec2(uRes.x/uRes.y, 1.));
+  vec2 off = d * uRes.y * (.008 + .012*smoothstep(.35, 0., md));            // colour fringing, stronger near the cursor
+  float side = step(uSplit*uRes.x, fc.x);                                    // right of the cursor line = glyphs
+  vec3 col = side > .5 ? vec3(scene(fc + off).r, scene(fc).g, scene(fc - off).b)
+                       : vec3(photo(fc + off*.5).r, photo(fc).g, photo(fc - off*.5).b);
+  float tm = texture(uText, uv).r;                                           // title: inverse of the blurred backdrop
+  if (tm > 0.){
+    vec2 c = cover(uv);
+    col = mix(col, 1. - mix(field(uv, c), img(c, 4.2), smoothstep(.05, .6, msk(c, 4.2))), tm);
+  }
+  col *= 1. - .3*pow(length(d*vec2(1.05, 1.25)), 2.);
+  col += (hash(fc + fract(uTime*7.)*91.) - .5) * .05;
+  outColor = vec4(col, 1.);
+}`;
+
+stage({
+  fs: FS,
+  focus: [0.6, 0.5],                                   // EDIT: subject centre in source uv (y up) — the crop leans toward it
+  cell: [4, 36],                                       // grid size range (px): cursor at top → bottom
+  atlas: { chars: ' .:-=+*#%@', font: '"JetBrains Mono"' },   // EDIT or remove (procedural glyphs don't need an atlas)
+  onFrame({ t, video, toScreen }){
+    // EDIT: per-frame line art — toScreen(u, v) maps a point on the subject (source uv, y up) to screen px
+  },
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biolume</title>
+<meta name="description" content="Biolume — a late-night aquarium session in total darkness. ASCII Atlas Nº11.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&family=Major+Mono+Display&family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+:root{
+  --bg:#000;
+  --ink:#eafcff;
+  --ink-dim:rgba(234,252,255,.55);
+  --hair:rgba(63,246,255,.22);
+  --accent:#3ff6ff;              /* bioluminescent cyan */
+  --accent-2:#ff3fb4;            /* nettle magenta */
+  --uv:#7a5cff;
+  --panel:rgba(0,0,0,.92);
+  --line:rgba(63,246,255,.85);
+  --line-glow:rgba(63,246,255,.6);
+  --tag-bg:rgba(0,0,0,.7);
+  --cta-fade:rgba(0,0,0,.94);
+  --display:"Syne", system-ui, sans-serif;
+  --serif:"Syne", system-ui, sans-serif;
+  --mono:"Major Mono Display", ui-monospace, monospace;
+  --sans:"Syne", system-ui, sans-serif;
+}
+.fallback .hero,.fallback .cta{background:url(media/jelly-poster.jpg) 60% 50%/cover}
+.spread{font:500 clamp(10px,.95vw,14px)/1 var(--mono);letter-spacing:.12em;color:var(--accent)}
+.word{font-family:var(--display);font-weight:800;font-size:max(23vw,17vh);letter-spacing:-.06em;color:var(--ink)}
+.w1{top:calc(64px + 3vh - .1em);left:-1vw}
+.w2{bottom:calc(26px + 4vh - .22em);left:22vw}
+#ring{border-color:var(--accent);box-shadow:0 0 16px var(--accent),inset 0 0 10px var(--accent-2)}
+#ring::after{background:var(--accent-2)}
+#gridTag{color:var(--accent)}
+
+/* ——— deep-sea instruments: currents, sonar, depth gauge, glow rays ——— */
+.cur{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.cur path{fill:none;stroke-width:1;vector-effect:non-scaling-stroke}
+.sonar{position:absolute;width:0;height:0;pointer-events:none}
+.sonar i{position:absolute;left:-60px;top:-60px;width:120px;height:120px;border-radius:50%;border:1px solid var(--accent);opacity:0;
+  animation:ping 3.6s cubic-bezier(.2,.6,.3,1) infinite}
+.sonar i:nth-child(2){animation-delay:1.2s;border-color:var(--accent-2)}
+.sonar i:nth-child(3){animation-delay:2.4s;border-color:var(--uv)}
+.sonar b{position:absolute;left:18px;top:-26px;white-space:nowrap;font:400 10px var(--mono);letter-spacing:.08em;color:var(--ink)}
+.sonar b::before{content:"";position:absolute;left:-18px;top:6px;width:14px;height:1px;background:var(--accent)}
+.sonar u{position:absolute;left:-3px;top:-3px;width:6px;height:6px;background:var(--accent);text-decoration:none;box-shadow:0 0 10px var(--accent)}
+@keyframes ping{0%{transform:scale(.2);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+.rays{position:absolute;width:0;height:0;pointer-events:none}
+.rays svg{position:absolute;left:-220px;top:-220px;width:440px;height:440px;overflow:visible;animation:spin 60s linear infinite}
+.rays line{stroke:var(--accent);stroke-width:1;vector-effect:non-scaling-stroke}
+.depth{position:absolute;left:var(--gutter);top:14%;bottom:14%;width:80px;pointer-events:none;font:400 9.5px/1 var(--mono);color:var(--ink-dim)}
+.depth i{position:absolute;left:0;height:1px;background:rgba(63,246,255,.55)}
+.depth span{position:absolute;left:30px;transform:translateY(-50%)}
+.depth .mk{position:absolute;left:0;width:150px;height:1px;background:var(--accent-2);box-shadow:0 0 8px var(--accent-2)}
+.depth .mk b{position:absolute;left:66px;top:-14px;font-weight:400;color:var(--accent-2);white-space:nowrap}
+
+.manifesto p{font-weight:600;letter-spacing:-.035em}
+.manifesto p em{font-style:normal;color:var(--accent);text-shadow:0 0 24px rgba(63,246,255,.7)}
+.kicker{color:var(--accent-2)}
+.marquee{background:#000;color:var(--accent);border-color:var(--accent)}
+.marquee span{font-family:var(--display);font-weight:800;letter-spacing:-.05em;text-shadow:0 0 30px rgba(63,246,255,.6)}
+.marquee span i{font-style:normal;color:var(--accent-2)}
+.specs dd{font-family:var(--display);font-weight:800;letter-spacing:-.05em}
+.cta h2{font:800 clamp(80px,16vw,280px)/.82 var(--display);letter-spacing:-.07em}
+.cta h2 i{font-style:normal;color:var(--accent);text-shadow:0 0 50px rgba(63,246,255,.6)}
+.btn{background:transparent;color:var(--accent);border:1px solid var(--accent);box-shadow:0 0 22px rgba(63,246,255,.35),inset 0 0 14px rgba(63,246,255,.25)}
+.btn:hover{background:var(--accent);color:#000}
+footer{background:#000;border-top:1px solid var(--hair)}
+
+@media (max-width:760px){
+  .word{font-size:33vw}
+  .w1{top:calc(64px + 6vh - .1em)}
+  .w2{bottom:calc(26px + 8vh - .22em);left:8vw}
+  .depth,.sonar b{display:none}
+  .cta h2{font-size:18vw}                  /* "quietly." in wide Syne is wider than a phone at the desktop minimum */
+}
+@media (prefers-reduced-motion:reduce){ .sonar i,.rays svg{animation:none} }
+</style>
+</head>
+<body>
+<canvas id="stage" aria-hidden="true"></canvas>
+<div id="split" aria-hidden="true"><span class="lab l">← Lens</span><span class="lab r">Braille →</span><span id="gridTag">Grid 0px</span></div>
+<div id="hsplit" aria-hidden="true"></div>
+<div id="ring" aria-hidden="true"></div>
+<video id="src" src="media/jelly-loop.mp4" muted loop playsinline autoplay preload="auto" crossorigin="anonymous"></video>
+
+<header>
+  <div class="logo"><b>ASCII Atlas</b>Nº11</div>
+  <nav class="pages" aria-label="Issues"><a href="index.html"><span>07</span><b>Weightless</b></a><a href="unfold.html"><span>08</span><b>Unfold</b></a><a href="hello.html"><span>09</span><b>Hello</b></a><a href="updraft.html"><span>10</span><b>Updraft</b></a><a href="biolume.html" aria-current="page"><span>11</span><b>Biolume</b></a></nav>
+  <a class="r" href="#dive">Dive ↗</a>
+</header>
+
+<main>
+  <section class="hero" aria-label="Biolume">
+    <svg class="cur" id="cur" aria-hidden="true">
+      <defs>
+        <linearGradient id="gC" x1="0" x2="1"><stop offset="0" stop-color="#3ff6ff" stop-opacity="0"/><stop offset=".35" stop-color="#3ff6ff" stop-opacity=".55"/><stop offset="1" stop-color="#7a5cff" stop-opacity="0"/></linearGradient>
+        <linearGradient id="gM" x1="0" x2="1"><stop offset="0" stop-color="#ff3fb4" stop-opacity="0"/><stop offset=".5" stop-color="#ff3fb4" stop-opacity=".5"/><stop offset="1" stop-color="#ff3fb4" stop-opacity="0"/></linearGradient>
+      </defs>
+    </svg>
+    <div class="rays" id="rays" aria-hidden="true"><svg viewBox="-220 -220 440 440" id="raySvg"></svg></div>
+    <div class="spread top" aria-hidden="true"><span>Most</span><span>of</span><span>the</span><span>deep</span><span>sea</span><span>makes</span><span>its</span><span>own</span><span>light</span></div>
+    <h1 class="word w1">Bio<span class="bl"></span></h1>
+    <div class="word w2" aria-hidden="true">lume<span class="bl"></span></div>
+    <div class="spread bot" aria-hidden="true"><span>no</span><span>brain</span><span>no</span><span>heart</span><span>still</span><span>glowing</span></div>
+
+    <div class="depth" id="depth" aria-hidden="true"><div class="mk" id="mkDepth"><b>612 m</b></div></div>
+    <div class="sonar" id="s0" aria-hidden="true"><i></i><i></i><i></i><u></u><b>Chrysaora · sea nettle</b></div>
+    <div class="sonar" id="s1" aria-hidden="true"><i></i><i></i><i></i><u></u><b>Aurelia · moon jelly</b></div>
+    <div class="sonar" id="s2" aria-hidden="true"><i></i><i></i><i></i><u></u><b>Bell · pulsing</b></div>
+  </section>
+
+  <section class="panel manifesto" id="note">
+    <div class="kicker reveal">01 — Dispatch from 600 m</div>
+    <p class="reveal">No brain, no heart, no bones — and drifting through the oceans for over <em>500 million years</em><sup>[01]</sup>. Maybe that’s the trick: pulse, glow, <em>let the current do the rest.</em></p>
+    <div class="sig reveal"><span>[01] older than dinosaurs, fish and trees</span><span>Transmitted in the dark</span></div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div>
+    <span>Pulse <i>✶</i> Glow <i>✶</i> Drift <i>✶</i> Repeat <i>✶</i></span>
+    <span>Pulse <i>✶</i> Glow <i>✶</i> Drift <i>✶</i> Repeat <i>✶</i></span>
+  </div></div>
+
+  <section class="panel specs" id="vitals">
+    <div class="kicker reveal">02 — Vitals</div>
+    <dl class="reveal">
+      <div><dt>Brain</dt><dd>0</dd></div>
+      <div><dt>Heart</dt><dd>0</dd></div>
+      <div><dt>Water</dt><dd>≈95<small>%</small></dd></div>
+      <div><dt>On earth</dt><dd>500M+<small>yrs</small></dd></div>
+    </dl>
+  </section>
+
+  <section class="cta" id="dive">
+    <h2 class="reveal">Glow<br><i>quietly.</i></h2>
+    <div class="row reveal">
+      <p>Biolume — a late-night aquarium session in total darkness. Ninety minutes, headphones on, no flash photography.</p>
+      <a class="btn" href="#dive">Dive in <span>→</span></a>
+    </div>
+  </section>
+</main>
+<footer><span>ASCII Atlas Nº11 — Biolume</span><span>Fictional event · design study</span><span>−612 m · 4 °C</span></footer>
+
+<script type="module">
+import { stage } from './engine.js';
+
+// The deep: black water, surface caustics, drifting marine snow, braille-dot glyphs that glow in the jellyfish's own neon.
+const FS = `
+vec3 field(vec2 uv, vec2 c){
+  float t = uTime, asp = uRes.x/uRes.y;
+  vec3 col = mix(vec3(0.), vec3(0., .025, .07), smoothstep(.35, 1., uv.y));            // a little light from the surface
+  // caustic net, strongest near the top
+  vec2 q = uv*vec2(asp, 1.)*5.;
+  float k = 0.;
+  for (int i = 0; i < 3; i++){ q += .55*vec2(sin(q.y*1.3 + t*.45), cos(q.x*1.1 - t*.35)); k += abs(sin(q.x) + sin(q.y)); }
+  col += vec3(.1, .55, .75) * pow(1. - clamp(k/5., 0., 1.), 7.) * .3 * smoothstep(.4, 1., uv.y);
+  // marine snow: three parallax layers drifting up
+  for (int L = 0; L < 3; L++){
+    float s = 34. + float(L)*26.;
+    vec2 g = uv*vec2(asp, 1.)*s + vec2(sin(t*.2 + float(L))*.6, -t*(.25 + .2*float(L)));
+    vec2 id = floor(g), f = fract(g) - .5;
+    float h = hash(id + float(L)*7.);
+    vec2 o = vec2(hash(id + 3.), hash(id + 9.)) - .5;
+    float dot_ = smoothstep(.07, .0, length(f - o*.6)) * step(.86, h);
+    col += vec3(.55, .85, 1.) * dot_ * (.18 + .14*float(L)) * (.5 + .5*sin(t*2. + h*40.));
+  }
+  float halo = msk(c, 5.);
+  col += vec3(.0, .22, .32)*halo*.6 + vec3(.32, .0, .26)*halo*halo*.35;
+  return col;
+}
+
+vec3 scene(vec2 fc){
+  float t = uTime;
+  vec2 uv = fc/uRes;
+  vec3 col = field(uv, cover(uv));
+  float cs = uCell * (1. + uDissolve*3.);
+  vec2 ctr = uRes*.5;
+  vec2 gfc = fc - ctr, id = floor(gfc/cs), p = fract(gfc/cs);
+  vec2 cuv = cover(((id + .5)*cs + ctr)/uRes);
+  vec3 ic = img(cuv, 1.);
+  float mx = max(ic.r, max(ic.g, ic.b));
+  float l = smoothstep(.03, .55, mx);
+  float mm = smoothstep(.15, .7, msk(cuv, .5)) * (1. - uDissolve*.75);
+  float m = step(hash(id*1.37 + 3.1), mm);
+  float tw = hash(id + floor(t*8. + hash(id)*8.));
+  col *= 1. - .75*m;                                                          // pure black behind the glyphs: maximum contrast
+  vec3 neon = ic/max(mx, .04) * (.55 + .9*l);                                 // the jellyfish's own hue, pushed to full saturation
+  float i = clamp(l + (tw - .5)*.1, 0., .999) * uAtlasN;
+  col += neon * atlas(p, i) * m * 1.25;
+  return col;
+}
+
+vec3 photo(vec2 fc){ vec2 uv = fc/uRes, oc = cover(uv); return mix(field(uv, oc), img(oc, 0.)*1.1, smoothstep(.05, .6, msk(oc, 0.))); }
+
+void main(){
+  vec2 fc = gl_FragCoord.xy;
+  vec2 uv = fc/uRes;
+  vec2 d = uv - .5;
+  float md = length((uv - uMouse)*vec2(uRes.x/uRes.y, 1.));
+  vec2 off = d * uRes.y * (.014 + .018*smoothstep(.35, 0., md));
+  float side = step(uSplit*uRes.x, fc.x);
+  vec3 col = side > .5 ? vec3(scene(fc + off).r, scene(fc).g, scene(fc - off).b)
+                       : vec3(photo(fc + off*.5).r, photo(fc).g, photo(fc - off*.5).b);
+  vec2 c = cover(uv);
+  vec3 glow = img(c, 3.6);
+  col += glow * glow * msk(c, 3.) * .9;                                       // bloom
+  float tm = texture(uText, uv).r;
+  if (tm > 0.){
+    vec3 sb = mix(field(uv, c), img(c, 4.2)*1.2, smoothstep(.05, .6, msk(c, 4.2)));
+    col = mix(col, 1. - sb, tm);
+  }
+  col *= 1. - .35*pow(length(d*vec2(1.05, 1.25)), 2.);
+  col += (hash(fc + fract(uTime*7.)*91.) - .5) * .05;
+  outColor = vec4(col, 1.);
+}`;
+
+// ——— currents: a bundle of slow, tentacle-like lines behind the title ———
+const cur = document.getElementById('cur'), NS = 'http://www.w3.org/2000/svg';
+const LINES = Array.from({length: 54}, (_, i) => {
+  const p = document.createElementNS(NS, 'path');
+  p.setAttribute('stroke', i % 5 === 0 ? 'url(#gM)' : 'url(#gC)');
+  p.setAttribute('opacity', (.35 + (i % 7)/10).toFixed(2));
+  cur.appendChild(p);
+  return { p, y: .08 + i/54*.84, ph: i*.37, amp: 14 + (i*29 % 37), k: .004 + (i % 9)*.0006 };
+});
+function drawCurrents(t){
+  const W = innerWidth, H = innerHeight;
+  for (const L of LINES){
+    let d = '';
+    for (let x = -20; x <= W*.72; x += 18){
+      const y = L.y*H + Math.sin(x*L.k + t*.6 + L.ph)*L.amp + Math.sin(x*L.k*2.7 - t*.35 + L.ph*2)*L.amp*.35 + (x/W)*H*.08*Math.sin(L.ph);
+      d += (d ? 'L' : 'M') + x + ' ' + y.toFixed(1);
+    }
+    L.p.setAttribute('d', d);
+  }
+}
+// glow rays round the biggest bell
+const raySvg = document.getElementById('raySvg');
+for (let i = 0; i < 96; i++){
+  const a = i/96*Math.PI*2, r0 = 70 + (i % 3)*14, r1 = r0 + 30 + (i*37 % 70);
+  const l = document.createElementNS(NS, 'line');
+  [['x1', Math.cos(a)*r0], ['y1', Math.sin(a)*r0], ['x2', Math.cos(a)*r1], ['y2', Math.sin(a)*r1]].forEach(([k, v]) => l.setAttribute(k, v.toFixed(1)));
+  l.setAttribute('opacity', (.15 + (i % 4)*.12).toFixed(2));
+  raySvg.appendChild(l);
+}
+// depth gauge
+const depth = document.getElementById('depth'), mkDepth = document.getElementById('mkDepth');
+for (let i = 0; i <= 140; i++){
+  const y = i/140*100, tick = document.createElement('i');
+  tick.style.cssText = `top:${y}%;width:${i % 20 === 0 ? 24 : i % 5 === 0 ? 12 : 5}px;opacity:${i % 5 ? .5 : 1}`; depth.appendChild(tick);
+  if (i % 20 === 0){ const s = document.createElement('span'); s.style.top = `${y}%`; s.textContent = `${500 + i}m`; depth.appendChild(s); }
+}
+
+// bell tracks, one per jellyfish: [time, u, v] in source uv, extracted from the video (tools/track_blobs.py)
+let TRACK = null;
+fetch('media/jelly-track.json').then(r => r.ok ? r.json() : null).then(j => TRACK = j).catch(() => {});
+const FALLBACK = [[.44, .70], [.37, .30], [.63, .28]];
+const sonars = [0, 1, 2].map(i => document.getElementById('s' + i)), rays = document.getElementById('rays');
+const at = (track, t) => {                                   // linear interpolation along one track
+  const f = track.fps*t, i = Math.min(Math.floor(f), track.pts.length - 2), k = f - i;
+  const a = track.pts[Math.max(i, 0)], b = track.pts[Math.max(i, 0) + 1];
+  return [a[0] + (b[0] - a[0])*k, a[1] + (b[1] - a[1])*k];
+};
+stage({ fs: FS, focus: [0.62, 0.5], cell: [4, 34], atlas: { chars: '⠀⠁⠃⠇⡇⣇⣧⣷⣿', font: '"Noto Sans Symbols 2"' }, onFrame({t, video, toScreen}){
+  drawCurrents(t);
+  const vt = video.currentTime || 0;
+  sonars.forEach((el, i) => {
+    const uv = TRACK?.[i] ? at(TRACK[i], vt) : FALLBACK[i], s = toScreen(...uv);
+    el.style.transform = `translate(${s.x}px,${s.y}px)`;
+    if (i === 0) rays.style.transform = `translate(${s.x}px,${s.y}px)`;
+  });
+  mkDepth.style.top = `${(50 + 18*Math.sin(t*.13)).toFixed(2)}%`;
+  mkDepth.firstChild.textContent = `${Math.round(500 + (50 + 18*Math.sin(t*.13))*1.4)} m`;
+}});
+</script>
+</body>
+</html>

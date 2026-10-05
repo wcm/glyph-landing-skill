@@ -1,0 +1,7 @@
+{
+  "image": "Three glowing jellyfish — Pacific sea nettles and a moon jellyfish — drifting in total darkness, a high-contrast bioluminescent macro photograph. Translucent bells lit from within, ribbon-like frilled oral arms and long fine tentacles trailing below, rims glowing electric cyan and magenta-pink, crisp detail. Grouped right of centre at different depths, the largest bell upper right, empty black space on the left. Pure black backdrop (#000000) filling every edge of the frame — no particles, no bubbles, nothing else.",
+  "video": "Lots of strong, energetic motion from the first frame to the last. The jellyfish actively swim: every bell pulses hard and fast, about once per second, visibly squeezing and expanding; they travel a long way — the big sea nettle swims up and across the frame and curves back, the moon jelly glides far to the left and returns, the small one rises and sinks; tentacles and oral arms whip, stream and swirl in long flowing curves behind them. Dynamic and continuous, ending back where they started. Locked camera. The background stays pure black. No new objects, no cuts.",
+  "duration": "15",
+  "cfg": 0.9,
+  "negative": "static, frozen, still image, slow, hovering in place, barely moving, camera movement, cut, new objects, particles, bubbles, text, background change, distortion, low quality"
+}

@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weightless</title>
+<meta name="description" content="Weightless — an exhibition about leaving the ground. ASCII Atlas Nº07.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+:root{
+  --bg:#04071a;                  /* deep sky */
+  --ink:#e9eefb;                 /* moonlight */
+  --ink-dim:rgba(214,224,247,.6);
+  --hair:rgba(190,205,240,.26);
+  --accent:#f2b866;              /* low sun */
+  --accent-2:#ee7a52;            /* sunrise rim */
+  --star:#fff6dc;
+  --panel:linear-gradient(180deg,rgba(4,7,26,.95),rgba(9,16,48,.94));
+  --line:rgba(233,238,251,.75);
+  --line-glow:rgba(170,195,255,.55);
+  --tag-bg:rgba(4,7,26,.6);
+  --cta-fade:rgba(4,7,26,.92);
+  --serif:"Bodoni Moda", "Didot", serif;
+  --display:"DM Serif Display", "Bodoni Moda", serif;
+  --mono:"JetBrains Mono", ui-monospace, monospace;
+  --sans:"Inter Tight", system-ui, sans-serif;
+}
+.fallback .hero,.fallback .cta{background:linear-gradient(rgba(4,7,26,.55),rgba(11,20,56,.55)),url(media/astronaut-poster.jpg) 62% 50%/cover}
+.spread{text-shadow:0 0 12px rgba(4,7,26,.6)}
+.word{font-family:var(--display);font-weight:400;font-size:max(24vw,17vh);letter-spacing:-.035em;color:var(--ink)}
+.w1{top:calc(64px + 3.2vh - .1em);left:-1.2vw}
+.w2{bottom:calc(26px + 4vh - .22em);left:-4.6vw}
+.w2 i{font-style:italic}
+#ring{box-shadow:0 0 14px var(--line-glow),inset 0 0 10px rgba(242,184,102,.25)}
+
+/* constellation behind the title */
+.sky{position:absolute;inset:-2%;width:104%;height:104%;pointer-events:none;
+  transform:translate(calc(var(--mx,0) * -14px),calc(var(--my,0) * 10px))}
+.sky line{stroke:rgba(200,214,250,.48);stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:var(--len);stroke-dashoffset:var(--len);
+  animation:draw 2.6s cubic-bezier(.6,.1,.2,1) forwards;animation-delay:var(--dl)}
+.sky line.faint{stroke:rgba(200,214,250,.24);stroke-dasharray:2 7;stroke-dashoffset:0;animation:none}
+.sky line.pulse{stroke:rgba(255,232,190,.85);stroke-width:1.4;stroke-dasharray:10 var(--len);stroke-dashoffset:0;
+  animation:pulse var(--pd) linear infinite;animation-delay:var(--dl)}
+.sky .node{fill:var(--star);animation:twinkle var(--tw) ease-in-out infinite;animation-delay:var(--dl);transform-box:fill-box;transform-origin:center}
+.sky .halo{fill:none;stroke:rgba(214,224,247,.55);stroke-width:1;vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:center;
+  animation:breathe 7s ease-in-out infinite;animation-delay:var(--dl)}
+.sky .orbit{fill:none;stroke:rgba(214,224,247,.3);stroke-width:1;stroke-dasharray:2 6;vector-effect:non-scaling-stroke;
+  transform-box:fill-box;transform-origin:center;animation:spin var(--od,60s) linear infinite}
+.sky .sat{fill:var(--accent)}
+.sky .dust{fill:#dfe7ff;animation:twinkle var(--tw) ease-in-out infinite;animation-delay:var(--dl)}
+.sky text{font:300 11px var(--mono);letter-spacing:.14em;fill:rgba(214,224,247,.55);text-transform:uppercase}
+.sky .sun{fill:var(--accent)}.sky .sunring{stroke:rgba(242,184,102,.7)}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pulse{from{stroke-dashoffset:calc(var(--len) + 10)}to{stroke-dashoffset:0}}
+@keyframes twinkle{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.18);opacity:.45}}
+
+/* HUD */
+.hud{position:absolute;inset:0;pointer-events:none;font:300 9.5px/1.35 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim)}
+.hline{position:absolute;left:var(--gutter);right:var(--gutter);height:1px;background:linear-gradient(90deg,var(--hair),transparent 30%,transparent 70%,var(--hair))}
+.hline::before,.hline::after{content:"";position:absolute;top:-2px;width:5px;height:5px;border-radius:50%;background:var(--ink)}
+.hline::before{left:0}.hline::after{right:0}
+.hline span{position:absolute;top:8px}
+.hline span:last-child{right:0;text-align:right}
+.reticle{position:absolute;border-radius:50%;border:1px solid var(--hair);transform:translate(-50%,-50%)}
+.reticle::before{content:"";position:absolute;inset:-14%;border-radius:50%;border:1px dashed rgba(190,205,240,.18);animation:spin 90s linear infinite}
+.reticle i{position:absolute;background:var(--ink-dim)}
+.reticle .t{left:50%;top:-10px;width:1px;height:20px}
+.reticle .b{left:50%;bottom:-10px;width:1px;height:20px}
+.reticle .l{top:50%;left:-10px;height:1px;width:20px}
+.reticle .rr{top:50%;right:-10px;height:1px;width:20px}
+.tag{position:absolute;white-space:nowrap;padding-left:46px}
+.tag::before{content:"";position:absolute;left:0;top:6px;width:40px;height:1px;background:var(--hair)}
+.tag b{color:var(--ink);font-weight:400}
+.plus{position:absolute;color:var(--accent-2);font:300 18px/1 var(--mono);transform:translate(-50%,-50%)}
+
+.manifesto p em{font-style:italic;color:var(--accent)}
+.marquee{background:linear-gradient(90deg,var(--accent-2),var(--accent) 45%,#f7dca6);color:var(--bg)}
+.marquee span i{font-weight:400}
+.cta h2{font:600 clamp(72px,15vw,260px)/.82 var(--serif);letter-spacing:-.05em}
+.cta h2 i{font-weight:400;color:var(--accent)}
+footer{background:#02040f}
+
+@media (max-width:760px){
+  .word{font-size:34vw}
+  .w1{top:calc(64px + 6vh - .1em)}
+  .w2{bottom:calc(26px + 7vh - .22em)}
+  .tag{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .reticle::before,.sky *{animation:none!important}
+  .sky line{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<canvas id="stage" aria-hidden="true"></canvas>
+<div id="split" aria-hidden="true"><span class="lab l">← Original</span><span class="lab r">Signal →</span><span id="gridTag">Grid 0px</span></div>
+<div id="hsplit" aria-hidden="true"></div>
+<div id="ring" aria-hidden="true"></div>
+<video id="src" src="media/astronaut-loop.mp4" muted loop playsinline autoplay preload="auto" crossorigin="anonymous"></video>
+
+<header>
+  <div class="logo"><b>ASCII Atlas</b>Nº07</div>
+  <nav class="pages" aria-label="Issues"><a href="index.html" aria-current="page"><span>07</span><b>Weightless</b></a><a href="unfold.html"><span>08</span><b>Unfold</b></a><a href="hello.html"><span>09</span><b>Hello</b></a><a href="updraft.html"><span>10</span><b>Updraft</b></a><a href="biolume.html"><span>11</span><b>Biolume</b></a></nav>
+  <a class="r" href="#visit">Reserve ↗</a>
+</header>
+
+<main>
+  <section class="hero" aria-label="Weightless">
+    <svg class="sky" id="sky" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+    <div class="spread top" aria-hidden="true"><span>You</span><span>don’t</span><span>need</span><span>ground</span><span>to</span><span>stand</span><span>on</span></div>
+    <h1 class="word w1">Weight<span class="bl"></span></h1>
+    <div class="word w2" aria-hidden="true"><i>less</i><span class="bl"></span></div>
+    <div class="spread bot" aria-hidden="true"><span>You</span><span>only</span><span>need</span><span>somewhere</span><span>to</span><span>look</span></div>
+
+    <div class="hud" aria-hidden="true">
+      <div class="hline" style="top:46%"><span>● ALT 408.2 KM</span><span>INCL 51.64° ●</span></div>
+      <div class="reticle" id="reticle"><i class="t"></i><i class="b"></i><i class="l"></i><i class="rr"></i></div>
+      <div class="tag" id="tagVisor">Visor / <b>reflectance 0.92</b><br>Stars: borrowed, not owned</div>
+      <div class="tag side" style="left:var(--gutter);top:30%;padding-left:0"><b id="clock">T+ 00:00:00</b><br>Signal: faint, steady</div>
+      <span class="plus" style="left:12%;top:72%">+</span>
+      <span class="plus" style="left:88%;top:22%">+</span>
+    </div>
+  </section>
+
+  <section class="panel manifesto" id="manifesto">
+    <div class="kicker reveal">01 — Manifesto</div>
+    <p class="reveal">Above the weather, a visor holds a whole <em>night</em> in its glass<sup>[01]</sup> — <em>borrowed</em>, for a while.</p>
+    <div class="sig reveal"><span>[01] Gold-film visor, 0.92 reflectance</span><span>Written at 27,600 km/h</span></div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div>
+    <span>No ground <i>·</i> No noise <i>·</i> No hurry <i>·</i> Only orbit <i>·</i></span>
+    <span>No ground <i>·</i> No noise <i>·</i> No hurry <i>·</i> Only orbit <i>·</i></span>
+  </div></div>
+
+  <section class="panel specs" id="inside">
+    <div class="kicker reveal">02 — Conditions inside</div>
+    <dl class="reveal">
+      <div><dt>Gravity</dt><dd>0.00<small>g</small></dd></div>
+      <div><dt>Sunrises per day</dt><dd>16</dd></div>
+      <div><dt>Ambient sound</dt><dd>12<small>dB</small></dd></div>
+      <div><dt>Things you need to be</dt><dd>None</dd></div>
+    </dl>
+  </section>
+
+  <section class="cta" id="visit">
+    <h2 class="reveal">Come up<br><i>for air.</i></h2>
+    <div class="row reveal">
+      <p>Weightless — an immersive exhibition in the Quiet Wing. Forty minutes, one visor, no phones. Opening on the winter solstice, 21.12.2026.</p>
+      <a class="btn" href="#visit">Reserve a seat in orbit <span>→</span></a>
+    </div>
+  </section>
+</main>
+<footer><span>ASCII Atlas Nº07 — Weightless</span><span>Fictional exhibition · design study</span><span>51.64°N · 0.00°E</span></footer>
+
+<script type="module">
+import { stage } from './engine.js';
+
+const FS = `
+// glyph ramp: · – + = □ ■
+float glyph(vec2 p, float v){
+  if (v < .14) return 0.;
+  if (v < .28) return box(p, vec2(.38), vec2(.62));
+  if (v < .42) return box(p, vec2(.12,.40), vec2(.88,.60));
+  if (v < .58) return max(box(p, vec2(.12,.42), vec2(.88,.58)), box(p, vec2(.42,.12), vec2(.58,.88)));
+  if (v < .74) return max(box(p, vec2(0.,.22), vec2(1.,.38)), box(p, vec2(0.,.62), vec2(1.,.78)));
+  if (v < .88) return box(p, vec2(.1), vec2(.9)) * (1. - box(p, vec2(.3), vec2(.7)));
+  return box(p, vec2(.06), vec2(.94));
+}
+
+// dream field: moss, light leaks, subject-shaped amber halo, blurred ghost of the footage
+vec3 field(vec2 uv, vec2 c){
+  float t = uTime;
+
+  // dream field: moss, light leaks, subject-shaped amber halo
+  vec3 col = mix(vec3(.004,.005,.025), vec3(.012,.015,.09), uv.y);                          // zenith -> ultramarine
+  col += vec3(.02,.09,.46) * blob(uv, vec2(.12+.08*sin(t*.17), .64+.12*sin(t*.11)), .48);   // electric blue
+  col += vec3(.30,.03,.36) * blob(uv, vec2(.86+.05*sin(t*.13), .40+.08*cos(t*.15)), .42) * .85;   // violet-magenta
+  col += vec3(.0,.30,.36) * blob(uv, vec2(.52+.12*sin(t*.09), 1.06), .30) * .4;           // teal, faint aurora
+  vec2 sunP = vec2(-.02,-.07) + .03*vec2(sin(t*.3), cos(t*.21));
+  col += vec3(.85,.20,.04) * blob(uv, sunP, .36);                                            // sun, low on the horizon
+  col += vec3(1.,.62,.24) * blob(uv, sunP + vec2(.02,.02), .15) * .75;
+  // bright blue counterweight on the right — off the edge and a third of the way up, so it doesn't mirror the sun
+  vec2 blueP = vec2(1.05,.30) + .03*vec2(cos(t*.23), sin(t*.29));
+  col += vec3(.05,.30,1.) * blob(uv, blueP, .33) * .95;
+  col += vec3(.35,.70,1.) * blob(uv, blueP + vec2(-.01,.01), .13) * .7;
+  col += vec3(.55,.74,1.) * blob(uv, vec2(1.02,1.03)+.02*vec2(cos(t*.2),sin(t*.17)), .26) * .5;  // moonglow
+  col = max(mix(vec3(dot(col, LW)), col, 1.3), 0.);                                         // push saturation
+  // starfield: sparse, twinkling, hidden behind the subject
+  vec2 sg = floor(uv*uRes/3.);
+  float sh = hash(sg);
+  col += vec3(.92,.95,1.) * step(.9965, sh) * (.35 + .65*pow(.5+.5*sin(t*(1.+sh*3.) + sh*80.), 3.));
+  float halo = msk(c, 5.2);
+  col += vec3(.30,.38,.78) * (halo*.22 + halo*halo*.08) + vec3(1.,.72,.4) * halo*halo*.08;   // moonlit halo, warm core
+  vec3 ghost = img(c, 3.6);
+  return mix(col, col*(.3+.6*ghost), .55*smoothstep(.0, .5, halo));     // ghost only around the subject, whatever the backdrop colour
+}
+
+vec3 scene(vec2 fc){
+  float t = uTime;
+  vec2 uv = fc/uRes;
+  vec3 col = field(uv, cover(warp(uv)));
+
+  // pixel / glyph layer — grid anchored at the screen centre so resizing it scales outward
+  float cs = uCell * (1. + uDissolve*3.);
+  vec2 ctr = uRes*.5;
+  float row = floor((fc.y - ctr.y)/cs);
+  float g1 = step(.975, hash(vec2(row, floor(t*2.3))));
+  float shift = g1 * (hash(vec2(row, 7.1)) - .5) * cs * 10.;
+  vec2 gfc = fc - ctr + vec2(shift, 0.);
+  vec2 id = floor(gfc/cs);
+  vec2 p = fract(gfc/cs);
+  vec2 cuv = cover(warp(((id+.5)*cs - vec2(shift,0.) + ctr)/uRes));
+  vec3 ic = img(cuv, 1.2);
+  float l = smoothstep(.06, .96, dot(ic, LW));
+  float mm = smoothstep(.22, .85, msk(cuv, .5)) * (1. - uDissolve*.75);
+  float m = step(hash(id*1.37 + 3.1), mm);                       // dithered, blocky edge
+  float tw = hash(id + floor(t*5. + hash(id)*5.));                 // twinkle
+  float lv = l + (tw-.5)*.10;
+
+  vec3 block = mix(vec3(.015,.022,.07), vec3(.22,.27,.52), l*l);        // pixelated underlay
+  col = mix(col, col*.4 + block*.7, m*.55);
+
+  vec3 iri = .5 + .5*cos(6.2831*(vec3(0.,.33,.67) + uv.x*.55 + uv.y*.35 + t*.04));
+  vec3 gcol = mix(mix(vec3(.90,.94,1.), iri, .15), vec3(1.,.83,.52), smoothstep(.82, 1., l)*.55);  // starlight, sun-gold on the brightest
+  col += gcol * glyph(p, lv) * m * (.32 + .48*l);
+
+  // stray scan streaks in the background, like the reference
+  float streak = step(.993, hash(vec2(row, floor(t*.7)))) * step(.5, fract(gfc.x/cs*.5)) * box(p, vec2(0.,.45), vec2(1.,.55));
+  col += vec3(.85,.9,1.) * streak * .35 * (1.-mm);
+  return col;
+}
+
+void main(){
+  vec2 fc = gl_FragCoord.xy;
+  vec2 uv = fc/uRes;
+  vec2 d = uv - .5;
+  float md = length((uv-uMouse)*vec2(uRes.x/uRes.y,1.));
+  float subj = msk(cover(warp(uv)), 3.);
+  vec2 off = d * uRes.y * (.006 + .012*smoothstep(.35,0.,md)) * mix(1.5, 1., subj);  // chromatic split: stronger on the background and near the cursor
+
+  vec3 col = vec3(scene(fc+off).r, scene(fc).g, scene(fc-off).b);
+
+  vec2 c = cover(warp(uv));
+  float m = msk(c, 2.5);
+  // bloom from the suit's highlights
+  float hl = max(dot(img(c, 3.5), LW) - .55, 0.) * 2.2;
+  col += vec3(.78,.86,1.) * hl*hl * m * .24;
+  // iridescent reflective sheen sweeping across the subject
+  float band = smoothstep(.1, 0., abs(fract(uv.x*.6 + uv.y*.45 - uTime*.035) - .5));
+  vec3 iri = .5 + .5*cos(6.2831*(vec3(0.,.33,.67) + uv.y*1.4 + uTime*.05));
+  col += iri * band * m * .16;
+
+  // left of the cursor line: the untreated footage — true colour, no pixels, no fringing
+  vec2 oc = cover(uv);
+  vec3 orig = mix(field(uv, oc), img(oc, 0.), smoothstep(.05, .6, msk(oc, 0.)));
+  col = mix(orig, col, step(uSplit*uRes.x, fc.x));
+
+  col *= 1. - .4*pow(length(d*vec2(1.05,1.25)), 2.2);              // vignette
+  col = col/(1.+col*.18);                                          // soft shoulder
+  col = pow(col, vec3(.96));
+
+  // title: inverse of a *blurred* backdrop, so the letters read smooth instead of inverting every glyph
+  float tm = texture(uText, uv).r;
+  if (tm > 0.){
+    vec3 bc = img(c, 4.2);
+    float bl = smoothstep(.06, .96, dot(bc, LW));
+    vec3 sbE = field(uv, c);
+    sbE = mix(sbE, sbE*.4 + mix(vec3(.015,.022,.07), vec3(.22,.27,.52), bl*bl)*.7 + vec3(.9,.94,1.)*bl*.3, msk(c, 4.2)*.6);
+    vec3 sbO = mix(field(uv, oc), img(oc, 4.2), smoothstep(.05, .6, msk(oc, 4.2)));
+    vec3 sb = mix(sbO, sbE, step(uSplit*uRes.x, fc.x));
+    col = mix(col, 1. - sb/(1.+sb*.18), tm);
+  }
+  col += (hash(fc + fract(uTime*7.)*91.) - .5) * .075;             // grain
+  outColor = vec4(col, 1.);
+}`;
+
+// HUD: reticle on the visor (source uv, GL y-up) — the Kling loop starts and ends on this framing
+const VISOR = [0.625, 0.43], VISOR_R = 0.26;
+const reticle = document.getElementById('reticle'), tagV = document.getElementById('tagVisor'), clock = document.getElementById('clock');
+const pad = n => String(n).padStart(2, '0');
+let last = 0;
+stage({ fs: FS, focus: [0.60, 0.47], onFrame({t, now, toScreen}){
+  const s = toScreen(...VISOR), r = VISOR_R*s.scale;
+  reticle.style.cssText = `left:${s.x}px;top:${s.y}px;width:${r*2}px;height:${r*2}px`;
+  tagV.style.cssText = `left:${s.x + r*.72}px;top:${s.y + r*.72}px`;
+  if (now - last > 250){ last = now; const k = Math.floor(t); clock.textContent = `T+ ${pad(Math.floor(k/3600))}:${pad(Math.floor(k/60)%60)}:${pad(k%60)}`; }
+}});
+
+// ——— constellation behind the title (1600×900 space, sliced to cover) ———
+(function sky(){
+  const svg = document.getElementById('sky'), NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs, parent = svg) => { const e = document.createElementNS(NS, tag);
+    for (const k in attrs) k === 'style' ? e.setAttribute('style', attrs[k]) : e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+  let seed = 7; const rnd = () => (seed = (seed*16807) % 2147483647) / 2147483647;
+  // [x, y, kind, label]  kind: 0 dot · 1 ringed dot · 2 ringed dot with orbiting satellite · 3 sun ☉
+  const N = {
+    a1:[90,170,1,'α Lyr'], a2:[255,118,0], a3:[420,212,2,'Luna'], a4:[612,138,0], a5:[786,262,1],
+    a6:[962,168,0,'mag 2.1'], a7:[1132,306,1], a8:[1300,196,3,'☉ Sol'], a9:[1490,118,0],
+    b1:[64,640,1], b2:[220,706,0], b3:[338,612,2,'HD 1729'], b4:[470,762,0], b5:[640,690,1,'β'], b6:[730,822,0], b7:[300,856,1]
+  };
+  const E = [['a1','a2'],['a2','a3'],['a3','a4'],['a4','a5'],['a3','a5'],['a5','a6'],['a6','a8'],['a5','a7'],['a7','a8'],['a8','a9'],
+             ['b1','b2'],['b2','b3'],['b3','b5'],['b2','b4'],['b4','b5'],['b5','b6'],['b4','b7']];
+  const FAINT = [['a1','b1'],['a3','b3'],['a7','b5']];
+
+  for (let i = 0; i < 90; i++)                                    // background dust
+    el('circle', {class:'dust', cx:(rnd()*1600).toFixed(1), cy:(rnd()*900).toFixed(1), r:(.6 + rnd()*1.3).toFixed(2),
+      style:`--tw:${(3 + rnd()*5).toFixed(2)}s;--dl:${(-rnd()*6).toFixed(2)}s;opacity:${(.25 + rnd()*.5).toFixed(2)}`});
+  el('circle', {class:'orbit', cx:1300, cy:196, r:150, style:'--od:140s'});    // the sun's wide orbit
+  el('circle', {class:'orbit', cx:420, cy:212, r:92, style:'--od:90s;animation-direction:reverse'});
+
+  FAINT.forEach(([p, q]) => el('line', {class:'faint', x1:N[p][0], y1:N[p][1], x2:N[q][0], y2:N[q][1]}));
+  E.forEach(([p, q], i) => {
+    const [x1, y1] = N[p], [x2, y2] = N[q], len = Math.hypot(x2-x1, y2-y1).toFixed(0);
+    el('line', {x1, y1, x2, y2, style:`--len:${len};--dl:${(.3 + i*.12).toFixed(2)}s`});
+    if (i % 3 === 0)                                              // signals travelling the lines
+      el('line', {class:'pulse', x1, y1, x2, y2, style:`--len:${len};--pd:${(4 + rnd()*5).toFixed(1)}s;--dl:${(3 + rnd()*4).toFixed(1)}s`});
+  });
+  Object.values(N).forEach(([x, y, kind, label], i) => {
+    const dl = `--dl:${(-rnd()*7).toFixed(2)}s`;
+    if (kind === 3){
+      el('circle', {class:'halo sunring', cx:x, cy:y, r:16, style:dl});
+      el('circle', {class:'sun', cx:x, cy:y, r:3.4});
+    } else {
+      el('circle', {class:'node', cx:x, cy:y, r: kind ? 2.4 : 1.8, style:`--tw:${(2.5 + rnd()*3).toFixed(2)}s;${dl}`});
+      if (kind >= 1) el('circle', {class:'halo', cx:x, cy:y, r:11, style:dl});
+      if (kind === 2){
+        const g = el('g', {class:'orbit', style:`--od:${(14 + rnd()*10).toFixed(1)}s;stroke:none`});
+        el('circle', {cx:x, cy:y, r:26, fill:'none', stroke:'rgba(214,224,247,.32)', 'stroke-dasharray':'2 5', 'vector-effect':'non-scaling-stroke'}, g);
+        el('circle', {class:'sat', cx:x+26, cy:y, r:2.2}, g);
+      }
+    }
+    if (label) el('text', {x:x + 20, y:y - 16}).textContent = label;
+  });
+})();
+</script>
+</body>
+</html>
